@@ -1,0 +1,155 @@
+.modal-content {
+    background-color: white;
+    border: 2px solid #fac23e;
+}
+
+.form-control {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 2px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control::-ms-expand {
+    background-color: transparent;
+    border: 0;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #fde9ba;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(250, 194, 62, 0.25);
+}
+
+.form-control::-webkit-input-placeholder {
+    color: #6c757d;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.form-control::-moz-placeholder {
+    color: #6c757d;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.form-control:-ms-input-placeholder {
+    color: #6c757d;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.form-control::-ms-input-placeholder {
+    color: #6c757d;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.form-control::placeholder {
+    color: #6c757d;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e9ecef;
+}
+
+.btn {
+    font-weight: 800;
+    letter-spacing: .05em;
+    border: 2px solid transparent;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn-outline-primary {
+    color: #FDEBA2;
+    background-color: transparent;
+    background-image: none;
+    border-color: #FDEBA2;
+}
+
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #FDEBA2;
+    border-color: #FDEBA2;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary.focus {
+    box-shadow: 0 0 0 0.2rem rgba(250, 194, 62, 0.5);
+}
+
+.custom-radio .custom-control-label::before {
+    border-radius: 50%;
+}
+
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #FDEBA2;
+}
+
+.custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+.custom-radio .custom-control-input:disabled:checked ~ .custom-control-label::before {
+    background-color: rgba(250, 194, 62, 0.5);
+}
+
+.table thead tr th{
+    font-weight: bold;
+}
+
+.btnEdit {
+    color: green;
+    font-size: 25px;
+}
+
+.btnDelete {
+    color:red;
+    font-size: 25px;
+}
+
+.btnShow{
+    color: #87ff16;
+    font-size: 25px;
+}
+
+.btnFile {
+    color: rgba(128, 138, 100, 0.47);
+    font-size: 25px;
+}
+
+.btnFile :hover {
+    color:#FDEBA2;
+}
+
+.btnEdit :hover {
+    color:#FDEBA2;
+}
+
+.btnShow :hover {
+    color:#FDEBA2;
+}
+
+.btnDelete :hover {
+    color:#FDEBA2;
+}
+
+.myNav {
+    width: 100%;
+    align-content: center;
+}
+
+.myNav ul {
+    text-align:center;
+    position: relative;
+    display: inline-flex;
+}

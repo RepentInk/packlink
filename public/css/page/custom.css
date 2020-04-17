@@ -1,0 +1,19 @@
+#canvas {
+    background-color: #253336;
+    width: 100%;
+    height: 300px;
+}
+
+
+/* your styles go here */
+
+.myNav {
+    width: 100%;
+    align-content: center;
+}
+
+.myNav ul {
+    text-align: center;
+    position: relative;
+    display: inline-flex;
+}
