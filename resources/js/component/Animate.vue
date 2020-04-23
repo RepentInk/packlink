@@ -1,4 +1,0 @@
-<template>
-      <canvas id="canvas"></canvas>
-</template>
-

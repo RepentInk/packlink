@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="{{ asset('/css/slider.css') }}">
 <!-- Favicon-->
 
-<link rel="shortcut icon" href="{{ asset('/logo.png') }}">
+<link rel="shortcut icon" href="{{ asset('/image/packlink.png') }}">
 
 
 <!-- Tweaks for older IEs--><!--[if lt IE 9]>
