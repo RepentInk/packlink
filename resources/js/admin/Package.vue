@@ -69,8 +69,8 @@
                                     <tr v-for="(pack,index) in paginated" :key="pack.id">
                                         <td>{{ index += 1}}</td>
                                         <td>{{ pack.name | upperCase }} </td>
-                                        <td>{{ pack.link }}</td>
-                                        <td>{{ pack.command }}</td>
+                                        <td>{{ pack.link | reduceText(20, '...')}}</td>
+                                        <td>{{ pack.command | reduceText(20, '...') }}</td>
                                         <td>{{ pack.created_at | dateOnly }}</td>
                                         <td colspan="2" class="text-center">
                                             <a href="" class="btnEdit" @click.prevent="showData(pack)"

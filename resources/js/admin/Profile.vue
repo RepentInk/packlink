@@ -222,7 +222,7 @@
                 $('#changepass').modal('hide');
             },
 
-            submitFormProfile(){
+            submitFormProfile() {
                 this.isLoading = true;
                 let formdata = new FormData();
 

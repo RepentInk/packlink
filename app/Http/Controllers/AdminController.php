@@ -7,6 +7,7 @@ use App\Installation;
 use App\Language;
 use App\Medium;
 use App\Package;
+use App\Rating;
 use App\Usage;
 use App\User;
 use Illuminate\Http\Request;
@@ -503,7 +504,6 @@ class AdminController extends Controller
 
         return response()->json($install);
     }
-
 
 
     /**

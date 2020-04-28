@@ -1,82 +1,78 @@
 <template>
     <div>
 
-        <section class="bg-light">
+        <section>
             <div class="container py-5">
-                <div class="row">
 
-                    <div class="col-lg-4 mb-4">
-                        <div class="shadow-lg box">
-                            <div class="p-4 border bg-white">
-                                <h3 class="h5">
-                                    <a class="reset-anchor">Title</a>
-                                </h3>
-                                <hr>
-                                <p class="text-small myBody text-muted">Content</p>
+                <div class="row mb-5">
+
+                    <div class="col-xl-4 col-lg-4 col-mb-4 col-sm-12">
+                        <div class="mybox">
+
+                            <div class="header">
+                                <span class="fas fa-people-carry"></span>
+                                <h4> Packages Collection </h4>
                             </div>
+
+                            <div class="body">
+                               <p>
+                                  Brings together all packages that speed up developers work on one platform to reduce the stress developers goes through in search for packages.
+                               </p>
+                            </div>
+
+                            <div class="footer">
+                                  <a :href="'/search/package'">Browse Packages</a>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="col-lg-4 mb-4">
-                        <div class="shadow-lg box">
-                            <div class="p-4 border bg-white">
-                                <h3 class="h5">
-                                    <a class="reset-anchor">Title</a>
-                                </h3>
-                                <hr>
-                                <p class="text-small myBody text-muted">Content</p>
+                    <div class="col-xl-4 col-lg-4 col-mb-4 col-sm-12">
+                        <div class="mybox">
+
+                            <div class="header">
+                                <span class="fas fa-people-carry"></span>
+                                <h4> Tutorial Collection </h4>
                             </div>
+
+                            <div class="body">
+                               <p>
+                                  Brings together all packages that speed up developers work on one platform to reduce the stress developers goes through in search for packages.
+                               </p>
+                            </div>
+
+                            <div class="footer">
+                                  <a :href="'/search/package'">Browse Packages</a>
+                            </div>
+
                         </div>
                     </div>
 
-                     <div class="col-lg-4 mb-4">
-                        <div class="shadow-lg box">
-                            <div class="p-4 border bg-white">
-                                <h3 class="h5">
-                                    <a class="reset-anchor">Title</a>
-                                </h3>
-                                <hr>
-                                <p class="text-small myBody text-muted">Content</p>
+
+                    <div class="col-xl-4 col-lg-4 col-mb-4 col-sm-12">
+                        <div class="mybox">
+
+                            <div class="header">
+                                <span class="fas fa-people-carry"></span>
+                                <h4> Reading Materials </h4>
                             </div>
+
+                            <div class="body">
+                               <p>
+                                  Brings together all packages that speed up developers work on one platform to reduce the stress developers goes through in search for packages.
+                               </p>
+                            </div>
+
+                            <div class="footer">
+                                  <a :href="'/search/package'">Browse Packages</a>
+                            </div>
+
                         </div>
                     </div>
+
+
 
                 </div>
-
-                <!-- <div class="row text-center" v-if="allAbout.length > length">
-                    <nav class="myNav" aria-label="Page navigation">
-                        <ul class="pagination">
-                            <li v-bind:class="[{disabled: !pagination.prevPage }]" class="active">
-                                <a href="#" class="page-link" @click.prevent="substraction()">
-                                    <b>Previous</b>
-                                </a>
-                            </li>
-
-                            <li class="page-item disabled">
-                                <a class="page-link " href="#" style="color: black">
-                                    Page
-                                    <b>{{ pagination.currentPage }}</b>
-                                    of
-                                    <b>{{ pagination.page }}</b>
-                                </a>
-                            </li>
-
-                            <li v-bind:class="[{disabled: !pagination.nextPage }]" class="active">
-                                <a href="#" class="page-link" @click.prevent="addition()">
-                                    <b>Next</b>
-                                </a>
-                            </li>
-
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" style="color: black"> From
-                                    <b>{{ pagination.from}}</b> to
-                                    <b>{{ pagination.to}}</b> out of
-                                    <b>{{ pagination.total }}</b>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div> -->
 
             </div>
         </section>
@@ -88,80 +84,56 @@
     export default {
         data () {
             return {
-                // allAbout:[],
-                // pagination:{
-                //     currentPage:1,
-                //     nextPage:'',
-                //     prevPage:'',
-                //     total:'',
-                //     from:'',
-                //     to:'',
-                //     page:'',
-                // },
-                // length:9,
+
             }
         },
 
         methods: {
-            //  getAboutUs(){
-            //      axios.get('/all/about')
-            //      .then((res) => {
-            //          this.allAbout = res.data;
-            //      }).catch(() => {
-            //          Swal.fire('Failed :','Getting all about failed','warning');
-            //      });
-            //  },
 
-            // substraction(){
-            //     if(this.pagination.currentPage <=  1){
-            //         Toast.fire('Page Limit :', 'Sorry cant go further', 'warning');
-            //     } else {
-            //         --this.pagination.currentPage;
-            //     }
-            // },
-
-            // addition(){
-            //     if(this.pagination.currentPage == this.pagination.page){
-            //         Toast.fire('Page Limit :', 'Sorry cant go further', 'warning');
-            //     } else {
-            //         ++this.pagination.currentPage;
-            //     }
-            // },
-
-            // paginate(array, length, pageNumber){
-            //     this.pagination.from = array.length ? ((pageNumber - 1) * length) + 1 : ' ';
-            //     this.pagination.to = pageNumber * length > array.length ? array.length : pageNumber * length;
-            //     this.pagination.prevPage = pageNumber > 1 ? pageNumber : '';
-            //     this.pagination.nextPage = array.length > this.pagination.to ? pageNumber + 1 : '';
-            //     this.pagination.page = Math.ceil(array.length / length);
-            //     this.pagination.total = array.length;
-
-            //     return array.slice((pageNumber - 1) * length, pageNumber * length);
-            // },
 
         },
 
-        mounted() {
-            // this.getAboutUs();
-        },
-
-        computed:{
-
-            // filteredAbout(){
-            //     return this.allAbout;
-            // },
-
-            // paginated(){
-            //     return this.paginate(this.filteredAbout, this.length, this.pagination.currentPage);
-            // },
-
-        },
     }
 </script>
 
 <style scoped lang="scss">
-      .myBody {
-          height: 300px;
-          overflow: auto;
-      }
+    .mybox {
+       height: 400px;
+       border-radius: 10px;
+       text-align: center;
+       padding: 32px;
+       box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.075) !important;
+    }
+
+    .mybox:hover {
+       box-shadow: 0 0.1rem 0.234rem black !important;
+    }
+
+    .header span {
+       font-size: 50px;
+       margin-bottom: 20px;
+    }
+
+    .header h4 {
+       font-family: serif;
+       font-weight: 400;
+       margin-bottom: 20px;
+    }
+
+    .body{
+        margin-bottom: 20px;
+    }
+
+    .footer {
+        padding-top: 20px;
+    }
+
+    .footer a {
+        text-decoration: none;
+        border-radius: 5px;
+        padding: 15px;
+        color: #ffffff;
+        background-color: #271d5e;
+    }
+
 </style>

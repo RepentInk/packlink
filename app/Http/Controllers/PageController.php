@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Package;
 use App\Rating;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -25,6 +26,11 @@ class PageController extends Controller
 
     public function dashboardPage(){
        return view('pages.dashbored');
+    }
+
+
+    public function searchPackagePage(){
+        return view('pages.search');
     }
 
 
@@ -76,6 +82,15 @@ class PageController extends Controller
         return response()->json($comment);
     }
 
+    public function getAuthRater($user_id, $pack_id){
+        $rated = Rating::where('user_id', $user_id)->where('pack_id', $pack_id)->first();
+        if($rated) {
+            return '1';
+        } else {
+            return '0';
+        }
+    }
+
     public function getPackageUser(){
         $package = Package::leftJoin('users','packages.user_id','=','users.id')
                   ->leftJoin('categories','packages.cat_id','=','categories.id')
@@ -87,6 +102,16 @@ class PageController extends Controller
                   ->get();
 
         return response()->json($package);
+    }
+
+    public function getUsers(){
+        $users = User::where('deleted_at', null)
+                ->select('id','nickname','name','email','profile','location','title','about','created_at')
+                ->where('user_type','user')
+                ->orderBy('created_at','desc')
+                ->get();
+
+        return response()->json($users);
     }
 
 

@@ -43,7 +43,13 @@ Vue.component('login-component', require('./component/Login').default);
 Vue.component('signup-component', require('./component/SignUp').default);
 Vue.component('dashboard-component', require('./component/Dashboard').default);
 Vue.component('profile-component', require('./page/Profile').default);
+Vue.component('home-component', require('./page/Home').default);
+Vue.component('user-component', require('./page/Users').default);
+Vue.component('user-profile-component', require('./page/UserProfile').default);
+Vue.component('user-package-component', require('./page/Package').default);
+Vue.component('search-package-component', require('./page/SearchPackage').default);
 Vue.component('star-rating', StarRating);
+
 
 
 //Registering admin component

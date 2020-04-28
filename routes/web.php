@@ -24,7 +24,20 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/sign-in/google','LoginController@google');
     Route::get('/sign-in/google/redirect','LoginController@googleRedirect');
     Route::get('/logout','LoginController@logout')->name('logout');
+    Route::get('/search/package','PageController@searchPackagePage')->name('search.package');
 
+
+    // Get Data
+    Route::get('/category','AdminController@getCategory');
+    Route::get('/package','PageController@getPackage');
+
+
+    // Data with id
+    Route::get('/pack/search/{id}','PageController@getPackageSearch');
+    Route::get('/pack/lang/{id}', 'AdminController@getPackLang');
+    Route::get('/pack/install/{id}', 'AdminController@getPackInstall');
+    Route::get('/rating/{id}', 'PageController@getRating');
+    Route::get('/comment/{id}', 'PageController@getPackComment');
 
 
     /**
@@ -58,6 +71,7 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::get('/get/category','AdminController@getCategory');
     Route::get('/get/language','AdminController@getLanguage');
     Route::get('/get/installation','AdminController@getInstallation');
+    Route::get('/get/users','PageController@getUsers');
 
 
     //Get Data with ID
@@ -66,6 +80,7 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::get('/get/pack/install/{id}', 'AdminController@getPackInstall');
     Route::get('/get/rating/{id}', 'PageController@getRating');
     Route::get('/get/comment/{id}', 'PageController@getPackComment');
+    Route::get('/get/auth/rater/{user_id}/{pack_id}', 'PageController@getAuthRater');
 
 
     //Post Routes

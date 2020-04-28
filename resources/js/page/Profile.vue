@@ -283,7 +283,9 @@
         },
 
         mounted() {
-            this.user = JSON.parse(this.userinfo);
+            if(this.userinfo){
+               this.user = JSON.parse(this.userinfo);
+            }
         },
 
     }
