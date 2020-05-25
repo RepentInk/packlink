@@ -19,15 +19,13 @@ class PageController extends Controller
      * ----------------------------------------------
      */
 
-     public function indexPage(){
-         return view('pages.index');
-     }
-
+    public function indexPage(){
+        return view('pages.index');
+    }
 
     public function dashboardPage(){
        return view('pages.dashbored');
     }
-
 
     public function searchPackagePage(){
         return view('pages.search');
@@ -50,7 +48,6 @@ class PageController extends Controller
         return response()->json($package);
     }
 
-
     public function getPackageSearch($id){
         $package = Package::leftJoin('categories','packages.cat_id','=','categories.id')
                     ->leftJoin('ratings','ratings.pack_id','=','packages.id')
@@ -66,20 +63,14 @@ class PageController extends Controller
         return response()->json($package);
     }
 
-
     public function getRating($id){
-        $rating = Rating::select('rating')->where('pack_id',$id)->get();
+        $rating = Rating::getRating($id, "r");
         return $rating;
     }
 
     public function getPackComment($id){
-        $comment = Comment::leftJoin('users','comments.user_id','=','users.id')
-                   ->select('comments.comment','users.id','users.nickname','comments.created_at','users.profile')
-                   ->where('comments.pack_id', $id)
-                   ->orderBy('comments.created_at','desc')
-                   ->get();
-
-        return response()->json($comment);
+        $comment = Comment::getComments($id, "p");
+        return $comment;
     }
 
     public function getAuthRater($user_id, $pack_id){
@@ -120,58 +111,14 @@ class PageController extends Controller
      * Post request functions
     */
     public function rating(Request $request){
-        $validator = Validator::make($request->all(), [
-            'pack_id' => 'required|numeric',
-            'rating' => 'required|numeric'
-        ]);
-
-        if($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()], 422);
-        }
-
-        try {
-
-            $rating = new Rating();
-            $rating->pack_id = $request['pack_id'];
-            $rating->user_id = Auth::id();
-            $rating->rating = $request['rating'];
-            $rating->save();
-
-            return $rating;
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 422);
-        }
+        $rating = Rating::saveRating($request, "r");
+        return $rating;
     }
 
     public function comment(Request $request){
-        $validator = Validator::make($request->all(), [
-            'pack_id' => 'required|numeric',
-            'comment' => 'required|string|min:10',
-        ]);
-
-        if($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()], 422);
-        }
-
-        try {
-
-            $comment = new Comment();
-            $comment->pack_id = $request['pack_id'];
-            $comment->user_id = Auth::id();
-            $comment->comment = $request['comment'];
-            $comment->save();
-
-            return "commented";
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 422);
-        }
+        $response = Comment::saveComment($request, "p");
+        return $response;
     }
-
-
-
-
 
 
 }

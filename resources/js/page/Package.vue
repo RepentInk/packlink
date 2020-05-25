@@ -15,7 +15,9 @@
                 </a>
 
             </div>
-        </div> <hr>
+        </div>
+
+        <hr>
 
         <div class="row mb-5" v-show="addpackage">
             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">

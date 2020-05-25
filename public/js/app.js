@@ -6457,6 +6457,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -68103,6 +68105,7 @@ var render = function() {
                             staticClass: "link",
                             attrs: {
                               href: _vm.pack.link,
+                              target: "_blank",
                               title: "Click to visit website"
                             }
                           },

@@ -17,6 +17,7 @@ class CreateRatingsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('pack_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('type');
             $table->double('rating');
             $table->timestamps();
 
@@ -26,11 +27,6 @@ class CreateRatingsTable extends Migration
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
 
-            $table->foreign('pack_id')
-                    ->references('id')
-                    ->on('packages')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
         });
     }
 

@@ -17,6 +17,7 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('pack_id');
+            $table->string('type');
             $table->longText('comment');
             $table->softDeletes();
             $table->timestamps();
@@ -24,12 +25,6 @@ class CreateCommentsTable extends Migration
             $table->foreign('user_id')
                     ->references('id')
                     ->on('users')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
-
-            $table->foreign('pack_id')
-                    ->references('id')
-                    ->on('packages')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
 

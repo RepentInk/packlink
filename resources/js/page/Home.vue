@@ -199,7 +199,7 @@
                             <tr>
                                 <th>Website</th>
                                 <td>
-                                    <a :href="pack.link" class="link" title="Click to visit website">
+                                    <a :href="pack.link" target="_blank" class="link" title="Click to visit website">
                                     {{ pack.link }}
                                     </a>
                                 </td>
