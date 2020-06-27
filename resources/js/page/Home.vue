@@ -1,6 +1,6 @@
 <template>
    <div>
-        <h3>Packages Collections </h3><hr>
+        <h6>Packages Collections </h6><hr>
 
         <div class="row">
 
@@ -47,7 +47,7 @@
 
                 <div class="table-responsive">
 
-                    <table class="table table-striped" v-if="allPackage">
+                    <table class="table table-sm table-striped" v-if="allPackage">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -63,7 +63,9 @@
                             <tr v-show="allPackage.length > 0" v-for="(pack,index) in paginated" :key="pack.id">
                                 <td>{{ index += 1}}</td>
                                 <td>{{ pack.name | upperCase | reduceText(30, '...')}} </td>
-                                <td><pre>{{ pack.command | reduceText(25, '...')}}</pre></td>
+                                <td style="padding:0">
+                                    <pre>{{ pack.command | reduceText(25, '...')}}</pre>
+                                </td>
                                 <td class="text-center" style="color:blue">
 
                                     <span v-if="pack.rate !== null">
@@ -113,8 +115,7 @@
                                     </a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="" class="btnEdit" @click.prevent="viewPackDetails(pack)"
-                                    title="Click to view">
+                                    <a href="#" class="btnEdit btn-sm" @click.prevent="viewPackDetails(pack)" title="Click to view">
                                         <i class="fas fa-eye text-success"></i>
                                     </a>
                                 </td>
@@ -184,7 +185,7 @@
                 </div>
 
                 <div class="modal-body">
-
+                   <div class="table-responsive">
                     <table class="table table-striped">
 
                         <tbody>
@@ -277,7 +278,7 @@
                             </tr>
                         </tbody>
                     </table>
-
+                   </div>
                     <div class="comment">
 
                         <a href="" @click.prevent="viewComment()" :class="{ active: viewcomment }">
@@ -781,6 +782,14 @@ select {
 .avatar {
   vertical-align: middle;
   border-radius: 50%;
+}
+
+thead th {
+    font-size: 13px;
+}
+
+tbody td {
+    font-size: 13px;
 }
 
 

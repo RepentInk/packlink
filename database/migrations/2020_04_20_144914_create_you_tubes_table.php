@@ -19,12 +19,13 @@ class CreateYouTubesTable extends Migration
             $table->string('url');
             $table->text('title');
             $table->string('type');
-            $table->unsignedBigInteger('prog_id');
+            $table->text('description');
+            $table->unsignedBigInteger('lang_id');
             $table->unsignedBigInteger('user_id');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('prog_id')
+            $table->foreign('lang_id')
             ->references('id')
             ->on('languages')
             ->onUpdate('cascade')

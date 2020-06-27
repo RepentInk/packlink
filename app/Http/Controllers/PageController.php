@@ -82,7 +82,7 @@ class PageController extends Controller
         }
     }
 
-    public function getPackageUser(){
+    public function getPackageUser($number){
         $package = Package::leftJoin('users','packages.user_id','=','users.id')
                   ->leftJoin('categories','packages.cat_id','=','categories.id')
                   ->select('packages.id','packages.name','packages.link','packages.command','packages.procedure',
@@ -90,7 +90,7 @@ class PageController extends Controller
                   'packages.created_at')
                   ->where('packages.user_id', Auth::id())
                   ->orderBy('packages.created_at','desc')
-                  ->get();
+                  ->paginate($number);
 
         return response()->json($package);
     }
@@ -103,6 +103,10 @@ class PageController extends Controller
                 ->get();
 
         return response()->json($users);
+    }
+
+    public function getTutorials(){
+
     }
 
 

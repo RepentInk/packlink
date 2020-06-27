@@ -87,5 +87,9 @@ export default {
     border-right: 3px solid #F48024;
 }
 
+.nav-item {
+    font-size: 13px;
+}
+
 </style>
 

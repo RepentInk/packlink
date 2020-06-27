@@ -11,10 +11,6 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import StarRating from 'vue-star-rating'
 
 
-
-
-
-
 //sweet alert
 Vue.use(Loading);
 window.Swal = Swal;
@@ -36,12 +32,13 @@ window.Toast = Toast;
 
 
 
-//Registering vue component
+// Registering vue component
 Vue.component("v-select", vSelect);
 Vue.component('index-component', require('./component/Index').default);
 Vue.component('login-component', require('./component/Login').default);
 Vue.component('signup-component', require('./component/SignUp').default);
 Vue.component('dashboard-component', require('./component/Dashboard').default);
+
 Vue.component('profile-component', require('./page/Profile').default);
 Vue.component('home-component', require('./page/Home').default);
 Vue.component('user-component', require('./page/Users').default);

@@ -67,11 +67,14 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     //Get Data Routes
     Route::get('/get/category','AdminController@getCategory');
     Route::get('/get/package','PageController@getPackage');
-    Route::get('/get/user/package','PageController@getPackageUser');
+    Route::get('/get/user/package/{number}','PageController@getPackageUser');
     Route::get('/get/category','AdminController@getCategory');
     Route::get('/get/language','AdminController@getLanguage');
     Route::get('/get/installation','AdminController@getInstallation');
     Route::get('/get/users','PageController@getUsers');
+
+    // Route with numbers
+    Route::get('/get/tutorial/{number}','AdminController@getUserTutorial');
 
 
     //Get Data with ID
@@ -90,6 +93,7 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::post('/post/category','AdminController@saveCategory');
     Route::post('/post/installation','AdminController@saveInstallation');
     Route::post('/post/language','AdminController@saveLanguage');
+    Route::post('/post/tutorial','AdminController@saveTutorial');
 
     //Update Routes
     Route::post('/update/profile', 'AdminController@updateUser');
@@ -100,6 +104,7 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::delete('/delete/package/{id}', 'AdminController@deletePackage');
     Route::delete('/delete/pack/lang/{id}', 'AdminController@deletePackLang');
     Route::delete('/delete/pack/install/{id}', 'AdminController@deletePackInstall');
+    Route::delete('/delete/tutorial/{id}', 'AdminController@deleteTutorial');
 
 });
 

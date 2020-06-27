@@ -10,6 +10,7 @@ use App\Package;
 use App\Rating;
 use App\Usage;
 use App\User;
+use App\YouTube;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
@@ -94,13 +95,24 @@ class AdminController extends Controller
     }
 
 
+    public function getUserTutorial($number){
+         $tutorial = YouTube::leftJoin('languages','you_tubes.lang_id','=', 'languages.id')
+                    ->select('you_tubes.id','you_tubes.name','you_tubes.url','you_tubes.title','you_tubes.type',
+                    'you_tubes.description','you_tubes.lang_id', 'languages.name as lang_name','you_tubes.created_at')
+                    ->where('you_tubes.user_id','=', Auth::id())
+                    ->orderBy('you_tubes.created_at','desc')
+                    ->paginate($number);
+
+        return response()->json($tutorial);
+    }
+
+
 
 
     /**
      * Save Data
     */
     public function saveUser(Request $request){
-
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|min:2',
             'email' => 'email|unique:users,email|nullable',
@@ -221,36 +233,56 @@ class AdminController extends Controller
 
         try{
 
+            $id = $request['id'];
             $existLink = Package::where('link', $request['link'])->where('deleted_at',null)->first();
-            if($existLink) {
-                return response()->json(['error' => "A Package has been registered with the link provided"], 402);
+            if($existLink && $id === null) {
+               return response()->json(['error' => "A Package has been registered with the link provided"], 402);
             }
 
-            $package = new Package();
+            if($id !== null){
+                $package = Package::findOrFail($id);
+            } else {
+                $package = new Package();
+            }
+
             $package->link = $request['link'];
             $package->name = $request['name'];
             $package->command = $request['command'];
             $package->cat_id = $request['cat_id'];
-            $package->user_id = Auth::id();
+
+            if($id === null) {
+              $package->user_id = Auth::id();
+            }
+
             $package->description = $request['description'];
             $package->procedure = $request['procedure'];
             $package->save();
 
             if ($request['install_id']){
                 foreach ($request['install_id'] as $install){
-                    $medium = new Medium();
-                    $medium->pack_id = $package->id;
-                    $medium->install_id = $install;
-                    $medium->save();
+
+                    $exist = Medium::where('pack_id',$id)->where('install_id', $install)->first();
+                    if(!$exist) {
+                        $medium = new Medium();
+                        $medium->pack_id = $package->id;
+                        $medium->install_id = $install;
+                        $medium->save();
+                    }
+
                 }
             }
 
             if ($request['lang_id']){
                 foreach ($request['lang_id'] as $lang){
-                    $usage = new Usage();
-                    $usage->pack_id = $package->id;
-                    $usage->lang_id = $lang;
-                    $usage->save();
+
+                    $exist = Usage::where('pack_id',$id)->where('lang_id', $lang)->first();
+                    if(!$exist) {
+                        $usage = new Usage();
+                        $usage->pack_id = $package->id;
+                        $usage->lang_id = $lang;
+                        $usage->save();
+                    }
+
                 }
             }
 
@@ -261,6 +293,55 @@ class AdminController extends Controller
         }
     }
 
+    public function saveTutorial(Request $request){
+        $validate = Validator::make($request->all(), [
+            'title' => 'required|string|min:2',
+            'name' => 'required|string',
+            'url' => 'required|string',
+            'lang' => 'required',
+            'des' => 'required',
+            'type' => 'required'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(['error' => $validate->errors()], 422);
+        }
+
+        try {
+
+            $id = $request['id'];
+
+            if ($id !== null) {
+
+                $tito = YouTube::findOrFail($id);
+                $tito->name = $request['name'];
+                $tito->title = $request['title'];
+                $tito->url = $request['url'];
+                $tito->type = $request['type'];
+                $tito->description = $request['des'];
+                $tito->lang_id = $request['lang'];
+                $tito->update();
+
+                return 'updated';
+
+            } else {
+                $tito = new YouTube();
+                $tito->name = $request['name'];
+                $tito->title = $request['title'];
+                $tito->url = $request['url'];
+                $tito->type = $request['type'];
+                $tito->description = $request['des'];
+                $tito->lang_id = $request['lang'];
+                $tito->user_id = Auth::id();
+                $tito->save();
+
+                return 'created';
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 402);
+        }
+    }
 
 
 
@@ -547,6 +628,12 @@ class AdminController extends Controller
     public function deletePackInstall($id){
        Medium::where('install_id', $id)->forceDelete();
        return "deleted";
+    }
+
+    public function deleteTutorial($id){
+        $tutorial = YouTube::findOrFail($id);
+        $tutorial->delete();
+        return "deleted";
     }
 
 }
