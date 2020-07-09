@@ -6,6 +6,7 @@ use App\Comment;
 use App\Package;
 use App\Rating;
 use App\User;
+use App\YouTube;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -34,42 +35,42 @@ class PageController extends Controller
 
 
     //Get Data Function
-    public function getPackage(){
+    public function getPackage($number){
         $package = Package::leftJoin('ratings','packages.id','=','ratings.pack_id')
                   ->leftJoin('categories','packages.cat_id','=','categories.id')
                   ->select('packages.id','packages.name','packages.link','packages.command','packages.procedure',
                   'categories.name as catname','categories.id as catid','packages.description','packages.created_at',
                    DB::raw('count(ratings.pack_id) as totalraters'), DB::raw('sum(ratings.rating) as rate'))
                   ->groupBy('packages.id','packages.name','packages.link','packages.command','packages.procedure',
-                  'packages.description','packages.created_at','catname','catid')
+                  'packages.description','packages.created_at','categories.name','categories.id')
                   ->orderBy('totalraters','desc')
-                  ->get();
+                  ->paginate($number);
 
         return response()->json($package);
     }
 
-    public function getPackageSearch($id){
+    public function getPackageSearch($id, $number){
         $package = Package::leftJoin('categories','packages.cat_id','=','categories.id')
                     ->leftJoin('ratings','ratings.pack_id','=','packages.id')
                     ->select('packages.id','packages.name','packages.link','packages.command','packages.procedure',
                     'packages.description','categories.name as catname','categories.id as catid',
                     'packages.created_at', DB::raw('count(ratings.user_id) as totalraters'), DB::raw('sum(ratings.rating) as rate'))
                     ->groupBy('packages.id','packages.name','packages.link','packages.command','packages.procedure',
-                    'packages.description','catname','catid','packages.created_at')
+                    'packages.description','categories.name','categories.id','packages.created_at')
                     ->where('packages.cat_id', $id)
                     ->orderBy('totalraters','desc')
-                    ->get();
+                    ->paginate($number);
 
         return response()->json($package);
     }
 
     public function getRating($id){
-        $rating = Rating::getRating($id, "r");
+        $rating = Rating::getRating($id);
         return $rating;
     }
 
-    public function getPackComment($id){
-        $comment = Comment::getComments($id, "p");
+    public function getPackComment($id, $type){
+        $comment = Comment::getComments($id, $type);
         return $comment;
     }
 
@@ -105,8 +106,35 @@ class PageController extends Controller
         return response()->json($users);
     }
 
-    public function getTutorials(){
+    public function getTutorial($number, $type){
+        $video_tutorial = YouTube::leftJoin('tito_ratings','you_tubes.id','=','tito_ratings.tito_id')
+                  ->leftJoin('languages','you_tubes.lang_id','=','languages.id')
+                  ->select('you_tubes.id','you_tubes.name','you_tubes.url','you_tubes.title','you_tubes.type',
+                  'languages.name as langname','languages.id as langid','you_tubes.description','you_tubes.created_at',
+                   DB::raw('count(tito_ratings.tito_id) as totalraters'), DB::raw('sum(tito_ratings.rating) as rate'))
+                  ->groupBy('you_tubes.id','you_tubes.name','you_tubes.url','you_tubes.title','you_tubes.description','you_tubes.created_at',
+                  'languages.name','languages.id','you_tubes.type')
+                  ->orderBy('totalraters','desc')
+                  ->where('you_tubes.type', $type)
+                  ->paginate($number);
 
+        return response()->json($video_tutorial);
+    }
+
+    public function getSearchTutorial($id, $number, $type){
+        $video_tutorial = YouTube::leftJoin('tito_ratings','you_tubes.id','=','tito_ratings.tito_id')
+                  ->leftJoin('languages','you_tubes.lang_id','=','languages.id')
+                  ->select('you_tubes.id','you_tubes.name','you_tubes.url','you_tubes.title','you_tubes.type',
+                  'languages.name as langname','languages.id as langid','you_tubes.description','you_tubes.created_at',
+                   DB::raw('count(tito_ratings.tito_id) as totalraters'), DB::raw('sum(tito_ratings.rating) as rate'))
+                  ->groupBy('you_tubes.id','you_tubes.name','you_tubes.url','you_tubes.title','you_tubes.description','you_tubes.created_at',
+                  'languages.name','languages.id','you_tubes.type')
+                  ->orderBy('totalraters','desc')
+                  ->where('you_tubes.type', $type)
+                  ->where('you_tubes.lang_id', $id)
+                  ->paginate($number);
+
+        return response()->json($video_tutorial);
     }
 
 
@@ -115,12 +143,12 @@ class PageController extends Controller
      * Post request functions
     */
     public function rating(Request $request){
-        $rating = Rating::saveRating($request, "r");
+        $rating = Rating::saveRating($request);
         return $rating;
     }
 
     public function comment(Request $request){
-        $response = Comment::saveComment($request, "p");
+        $response = Comment::saveComment($request);
         return $response;
     }
 

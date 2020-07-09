@@ -106,7 +106,7 @@ import 'vue-select/dist/vue-select.css';
 import { VueEditor } from "vue2-editor";
 import VueLoading from "vue-loading-overlay/src/js/Component";
 import Con from "../service/PackageController";
-import MyModalComponent from '../modals/myModals';
+import MyModalComponent from '../modals/LangModal';
 export default {
     props:['tito'],
     components:{
@@ -145,8 +145,7 @@ export default {
 
         openLangModal(){
             this.closeModal();
-            this.$refs.com.openLanguageModal();
-            //$("#addLangModel").modal('show');
+            $("#addLangModelTito").modal('show');
         },
 
         openModalTito(){

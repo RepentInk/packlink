@@ -23,7 +23,7 @@ class Comment extends Model
     ];
 
 
-    public static function saveComment($request, $type){
+    public static function saveComment($request){
         $validator = Validator::make($request->all(), [
             'pack_id' => 'required|numeric',
             'comment' => 'required|string|min:10',
@@ -38,7 +38,7 @@ class Comment extends Model
             $comment = new Comment();
             $comment->user_id = Auth::id();
             $comment->pack_id = $request['pack_id'];
-            $comment->type = $type;
+            $comment->type = $request['type'];
             $comment->comment = $request['comment'];
             $comment->save();
 

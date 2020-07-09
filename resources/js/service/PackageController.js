@@ -1,8 +1,5 @@
 export default {
 
-    /**
-     * Getting data from routes
-     */
     getCategory() {
         return axios.get('/get/category')
     },
@@ -25,6 +22,26 @@ export default {
 
     getPackInstallation(id) {
         return axios.get('/get/pack/install/' + id)
+    },
+
+    getComments(id, type) {
+        return axios.get('/get/comment/' + id + '/' + type);
+    },
+
+    getAuthUserRate(user_id, pack_id) {
+        return axios.get('/get/auth/rater/' + user_id + '/' + pack_id);
+    },
+
+    getRatings(id) {
+        return axios.get('/get/rating/' + id);
+    },
+
+    getTitoRatings(id) {
+
+    },
+
+    getAuthUserTitoRate(user_id, tito_id) {
+
     },
 
     /**
@@ -80,6 +97,29 @@ export default {
         });
 
         return axios.post('/post/package', form)
+    },
+
+    saveComments(id, comment_data, type) {
+        let com = new FormData();
+
+        com.append('pack_id', id);
+        com.append('comment', comment_data);
+        com.append('type', type)
+
+        return axios.post('/post/comment', com)
+    },
+
+    saveRatings(pack_id, rating) {
+        let form = new FormData();
+
+        form.append('pack_id', pack_id);
+        form.append('rating', rating);
+
+        return axios.post('/post/rating', form);
+    },
+
+    saveTitoRatings(tito_id, rating, type) {
+
     },
 
 

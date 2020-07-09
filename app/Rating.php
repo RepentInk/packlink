@@ -15,7 +15,7 @@ class Rating extends Model
        'pack_id', 'user_id', 'rating',
     ];
 
-    public static function saveRating($request, $type){
+    public static function saveRating($request){
         $validator = Validator::make($request->all(), [
             'pack_id' => 'required|numeric',
             'rating' => 'required|numeric'
@@ -30,7 +30,6 @@ class Rating extends Model
             $rating = new Rating();
             $rating->pack_id = $request['pack_id'];
             $rating->user_id = Auth::id();
-            $rating->type = $type;
             $rating->rating = $request['rating'];
             $rating->save();
 
@@ -41,11 +40,10 @@ class Rating extends Model
         }
     }
 
-    public static function getRating($id, $type){
+    public static function getRating($id){
         $rating = Rating::select('rating')
-                ->where('pack_id',$id)
-                ->where('type', $type)
-                ->get();
+                 ->where('pack_id', $id)
+                 ->get();
         return $rating;
     }
 }

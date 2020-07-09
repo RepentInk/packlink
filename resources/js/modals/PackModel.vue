@@ -194,7 +194,6 @@ export default {
         openLangModal(){
             this.closePackModal();
             this.$refs.mo.openLanguageModal();
-            //$("#addLangModel").modal('show');
         },
 
         openInstallModal(){

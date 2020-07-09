@@ -21,3 +21,34 @@ body {
     position: relative;
     display: inline-flex;
 }
+
+select {
+    color: black !important;
+}
+
+.form-select {
+    font-size: 1rem;
+    height: 50px;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 2px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+thead th {
+    font-size: 13px;
+}
+
+tbody td {
+    font-size: 13px;
+}
+
+tr th {
+    font-size: 13px;
+}
+
+.link {
+    color: #051be2;
+}

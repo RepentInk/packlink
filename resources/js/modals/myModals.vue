@@ -42,7 +42,7 @@
         </div>
         <!-- End of model -->
 
-         <!-- Model for Adding starts her -->
+        <!-- Model for Adding starts her -->
         <div class="modal fade" id="addLangModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
 

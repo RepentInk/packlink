@@ -12,16 +12,16 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                       <a class="nav-link" data-toggle="tab" href="#profile">
-                          <i class="fas fa-user"></i>
-                           Profile
-                        </a>
-                    </li>
-                    <li class="nav-item">
                        <a class="nav-link" data-toggle="tab" href="#add_package">
                           <i class="fas fa-plus"></i>
                            Add
                        </a>
+                    </li>
+                    <li class="nav-item">
+                       <a class="nav-link" data-toggle="tab" href="#profile">
+                          <i class="fas fa-user"></i>
+                           Profile
+                        </a>
                     </li>
                     <li class="nav-item">
                        <a class="nav-link" data-toggle="tab" href="#package_user">

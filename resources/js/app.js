@@ -48,7 +48,6 @@ Vue.component('search-package-component', require('./page/SearchPackage').defaul
 Vue.component('star-rating', StarRating);
 
 
-
 //Registering admin component
 Vue.component('admin-dashboard-component', require('./admin/Dashboard').default);
 Vue.component('admin-user-component', require('./admin/Users').default);

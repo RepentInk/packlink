@@ -1,14 +1,12 @@
 <template>
-<div class="container mb-5">
-
-        <h6 class="mt-3">Packages Collections </h6><hr>
+   <div>
 
         <div class="row">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="col-xl-12 col-lg-12">
                 <form class="form">
 
-                        <div class="form-group">
+                    <div class="form-group">
                         <v-select v-model="pack.cat_id"
                                 :options="allCategory"
                                 label="name"
@@ -16,13 +14,13 @@
                                 :reduce="allCategory => allCategory.id"
                                 placeholder="Search by package category">
                         </v-select>
-                        </div>
+                    </div>
 
                 </form>
 
             </div>
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="col-xl-12 col-lg-12">
 
             <div>
                 <div class="form-group float-left">
@@ -47,7 +45,7 @@
 
                 <div class="table-responsive">
 
-                    <table class="table table-striped" v-if="allPackage">
+                    <table class="table table-sm table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -59,12 +57,12 @@
                                 <th class="text-center">View</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr v-show="allPackage.length > 0" v-for="(pack,index) in filteredPackage" :key="pack.id">
+                        <tbody v-if="allPackage">
+                            <tr v-show="allPackage.length > 0" v-for="(pack,index) in filteredHomePack" :key="pack.id">
                                 <td>{{ index += 1}}</td>
-                                <td>{{ pack.name | upperCase | reduceText(30, '...')}} </td>
-                                <td>
-                                    <pre>{{ pack.command | reduceText(40, '...')}}</pre>
+                                <td>{{ pack.name | upperCase | reduceText(30, '...') }} </td>
+                                <td style="padding:0">
+                                    <pre>{{ pack.command | reduceText(25, '...')}}</pre>
                                 </td>
                                 <td class="text-center" style="color:blue">
 
@@ -115,14 +113,15 @@
                                     </a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="" class="btnEdit" @click.prevent="viewPackDetails(pack)"
-                                    title="Click to view">
+                                    <a href="#" class="btnEdit btn-sm" @click.prevent="viewPackDetails(pack)" title="Click to view">
                                         <i class="fas fa-eye text-success"></i>
                                     </a>
                                 </td>
                             </tr>
 
-                            <tr v-show="allPackage.length <= 0">
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
                                 <td colspan="7" class="text-center">
                                     Sorry! No results found
                                 </td>
@@ -137,7 +136,7 @@
         </div>
 
         <!-- navigation -->
-        <nav aria-label="Page navigation example" style="margin-bottom:70px">
+        <nav aria-label="Page navigation example">
             <ul class="pagination pagination-md justify-content-center">
                 <li v-bind:class="[{disabled: !pagination.prev_page_url }]" class="page-item">
                     <a href="#" class="page-link" @click.prevent="getPackage(pagination.prev_page_url)"><b>Previous</b></a>
@@ -157,175 +156,179 @@
             </ul>
         </nav>
 
-        <!-- Model view package starts here -->
+       <!-- Model view package starts here -->
        <div class="modal fade" id="viewPackageDetails" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 
-           <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+         <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
 
-                <div class="modal-content">
+            <div class="modal-content">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="text-align:center">
-                            Package Details
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="modal-header">
+                    <h6 class="modal-title" style="text-align:center">
+                        Package Details
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <vue-loading :active.sync="viewLoading"
+                            :can-cancel="true"
+                            :is-full-page="false">
+                    </vue-loading>
+
+                   <div class="table-responsive">
+                    <table class="table table-striped">
+
+                        <tbody class="viewDetails">
+                            <tr>
+                                <th>Package Name</th>
+                                <td>{{ pack.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Install Command</th>
+                                <td><pre>{{ pack.command }}</pre></td>
+                            </tr>
+                            <tr>
+                                <th>Website</th>
+                                <td>
+                                    <a :href="pack.link" target="_blank" class="link" title="Click to visit website">
+                                    {{ pack.link }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Category</th>
+                                <td>{{ pack.cat_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Install Medium</th>
+                                <td>
+                                    <span class="myBtn" v-for="install in allPackInstall" :key="install.id">
+                                        {{ install.name }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width:220px">Programming Language</th>
+                                <td>
+                                    <span class="myBtn" v-for="lang in allPackLang" :key="lang.id">
+                                        {{ lang.name }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Rate Status</th>
+                                <td>
+                                    <span>
+                                    <b style="color:blue;font-size:25px">
+                                        <sub>{{ totalRating }}</sub>
+                                    </b>
+                                    <star-rating
+                                        :inline="true"
+                                        :read-only="true"
+                                        :star-size="20"
+                                        :max-rating="5.0"
+                                        :show-rating="false"
+                                        v-model="totalRating"
+                                        :increment="0.1"
+                                        active-color="#F48024">
+                                    </star-rating>
+                                    <b style="color:blue;font-size:15px">
+                                        <sub> raters : {{ totalUsers }}</sub>
+                                    </b>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Rate Package</th>
+                                <td>
+                                    <star-rating id="rate"
+                                        :title="tooltipText"
+                                        :increment="1"
+                                        :max-rating="5.0"
+                                        active-color="#F48024"
+                                        :star-size="20"
+                                        :show-rating="false"
+                                        v-model="rating"
+                                        @current-rating="showText"
+                                        @rating-selected="setRating">
+                                    </star-rating>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td>
+                                    <p v-html="pack.description"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Simple Procedure</th>
+                                <td>
+                                    <p v-html="pack.procedure"></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                   </div>
+                   <div class="comment">
+
+                        <a href="" @click.prevent="viewComment()" :class="{ active: viewcomment }">
+                            <span class="badge badge-secondary">{{ allPackComment.length }}</span>
+                            comments
+                        </a>
+
+                        <a href="" @click.prevent="addComment()" :class="{ active: addcomment }">
+                            <i class="fas fa-comment"></i>
+                            add comment
+                        </a>
                     </div>
 
-                    <div class="modal-body">
+                    <div class="footer">
 
-                        <table class="table table-striped">
+                        <div class="viewcomment" v-show="viewcomment">
 
-                            <tbody>
-                                <tr>
-                                    <th>Package Name</th>
-                                    <td>{{ pack.name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Install Command</th>
-                                    <td><pre>{{ pack.command }}</pre></td>
-                                </tr>
-                                <tr>
-                                    <th>Website</th>
-                                    <td>
-                                        <a :href="pack.link" class="link" title="Click to visit website">
-                                        {{ pack.link }}
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Category</th>
-                                    <td>{{ pack.cat_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Install Medium</th>
-                                    <td>
-                                        <span class="myBtn" v-for="install in allPackInstall" :key="install.id">
-                                            {{ install.name }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="width:220px">Programming Language</th>
-                                    <td>
-                                        <span class="myBtn" v-for="lang in allPackLang" :key="lang.id">
-                                            {{ lang.name }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Rate Status</th>
-                                    <td>
-                                        <span>
-                                        <b style="color:blue;font-size:25px">
-                                            <sub>{{ totalRating }}</sub>
-                                        </b>
-                                        <star-rating
-                                            :inline="true"
-                                            :read-only="true"
-                                            :star-size="20"
-                                            :max-rating="5.0"
-                                            :show-rating="false"
-                                            v-model="totalRating"
-                                            :increment="0.1"
-                                            active-color="#F48024">
-                                        </star-rating>
-                                        <b style="color:blue;font-size:15px">
-                                            <sub> raters : {{ totalUsers }}</sub>
-                                        </b>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Rate Package</th>
-                                    <td>
-                                        <star-rating id="rate"
-                                            :title="tooltipText"
-                                            :increment="1"
-                                            :max-rating="5.0"
-                                            active-color="#F48024"
-                                            :star-size="20"
-                                            :show-rating="false"
-                                            v-model="rating"
-                                            @current-rating="showText"
-                                            @rating-selected="setRating">
-                                        </star-rating>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Description</th>
-                                    <td>
-                                        <p v-html="pack.description"></p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Simple Procedure</th>
-                                    <td>
-                                        <p v-html="pack.procedure"></p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <table class="table" style="font-size:12px">
+                                <tbody>
+                                    <tr v-show="allPackComment.length > 0" v-for="(com, index) in allPackComment" :key="index">
+                                        <td>
+                                                <img class="avatar" :src="'/image/user/' + com.profile " alt="profile" width="40px" height="40px">
+                                        </td>
+                                        <td>
+                                            {{ com.comment | upperCase }}
+                                            | <a class="commenter">{{  com.nickname | upperCase }}</a>
+                                                <span> {{ com.created_at | dateTime }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr v-show="allPackComment.length <= 0">
+                                        <td colspan="2" class="text-center">No comments on package</td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                        <div class="comment">
-
-                            <a href="" @click.prevent="viewComment()" :class="{ active: viewcomment }">
-                                <span class="badge badge-secondary">{{ allPackComment.length }}</span>
-                                comments
-                            </a>
-
-                            <a href="" @click.prevent="addComment()" :class="{ active: addcomment }">
-                                <i class="fas fa-comment"></i>
-                                add comment
-                            </a>
                         </div>
 
-                        <div class="footer">
+                        <div class="viewcomment" v-show="addcomment">
 
-                            <div class="viewcomment" v-show="viewcomment">
+                            <form class="form" @submit.prevent="sendComment()">
 
-                                <table class="table" style="font-size:12px">
-                                    <tbody>
-                                        <tr v-show="allPackComment.length > 0" v-for="(com, index) in allPackComment" :key="index">
-                                            <td>
-                                                    <img class="avatar" :src="'/image/user/' + com.profile " alt="profile" width="40px" height="40px">
-                                            </td>
-                                            <td>
-                                                {{ com.comment | upperCase }}
-                                                | <a class="commenter">{{  com.nickname | upperCase }}</a>
-                                                    <span> {{ com.created_at | dateTime }}</span>
-                                            </td>
-                                        </tr>
-                                        <tr v-show="allPackComment.length <= 0">
-                                            <td colspan="2" class="text-center">No comments on package</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                            <div class="viewcomment" v-show="addcomment">
-
-                                <form class="form" @submit.prevent="sendComment()">
-
-                                    <div class="form-group" style="padding-top: 10px;">
-                                        <label for="comment">
-                                            <i class="fas fa-comment"></i>
-                                            Comment
-                                        </label>
-                                        <textarea class="form-control" id="comment" cols="10" rows="3" minlength="10" v-model="comment.comment"
-                                        placeholder="Comment on this package" style="resize:none"></textarea>
-                                    </div>
-
-                                    <button class="btn btn-block btn-sm btnaddcomment" type="submit" style="color:white">
-                                        <i class="fas fa-sign-in-alt"></i>
+                                <div class="form-group" style="padding-top: 10px;">
+                                    <label for="comment">
+                                        <i class="fas fa-comment"></i>
                                         Comment
-                                    </button>
+                                    </label>
+                                    <textarea class="form-control" id="comment" cols="10" rows="3" minlength="10" v-model="comment.comment"
+                                    placeholder="Comment on this package" style="resize:none"></textarea>
+                                </div>
 
-                                </form>
+                                <button class="btn btn-block btn-sm btnaddcomment" type="submit" style="color:white">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Comment
+                                </button>
 
-                            </div>
+                            </form>
 
                         </div>
 
@@ -333,22 +336,26 @@
 
                 </div>
 
-           </div>
+              </div>
 
-       </div>
-       <!-- end view package details -->
+            </div>
 
-</div>
+        </div>
+        <!-- end view package details -->
+
+
+   </div>
 
 </template>
 <script>
   import VueLoading from "vue-loading-overlay/src/js/Component";
   import 'vue-select/dist/vue-select.css';
-  import Con from '../service/GuestController';
+  import Con from '../service/PackageController';
   export default {
       components : {
         VueLoading,
       },
+      props:['authuser'],
       data(){
           return {
             allPackage:[],
@@ -356,6 +363,8 @@
             allPackInstall:[],
             allPackComment:[],
             allCategory:[],
+            users:{},
+
             pack: {
                 id:'',
                 name:'',
@@ -366,40 +375,34 @@
                 cat_id:'',
                 cat_name:'',
             },
-            pagination:{
-                currentPage:1,
-                nextPage:'',
-                prevPage:'',
-                total:'',
-                from:'',
-                to:'',
-                page:'',
-            },
+
             comment:{
                 id:'',
                 pack_id:'',
                 comment:'',
                 type:'p',
             },
+
             search:'',
             length:20,
             rating:0,
             totalRating:0,
             totalUsers:0,
-
             tooltipText:'Go',
-            pagination:{},
-            type:'p',
 
             viewcomment:false,
             addcomment:true,
             tableLoading:false,
+            viewLoading:false,
+
+            rate_state:'',
+            pagination:{},
+            type:'p',
 
           }
       },
 
       methods: {
-
 
         /**
          * Comment functions goes here
@@ -416,22 +419,35 @@
         },
 
         sendComment(){
-            setTimeout(() => {
-                window.location.href = '/signup';
-            }, 500);
+            Con.saveComments(this.pack.id, this.comment.comment, this.comment.type)
+            .then((res) => {
+
+               this.comment.comment = "";
+               this.viewComment();
+               this.getPackageComments(this.pack.id, this.comment.type);
+
+            }).catch((error) => {
+
+                if(error.response.status === 402){
+                    Swal.fire("Failed :", error.response.data.error, "warning");
+                } else {
+                    let keys = Object.keys(error.response.data.error);
+                    Swal.fire("Failed",error.response.data.error[keys[0]][0],"warning");
+                }
+
+            });
+
         },
 
-        getPackageComments(id,type){
+        getPackageComments(id, type){
             this.allPackComment = [];
-            axios.get('/comment/' + id + '/' + type)
+            Con.getComments(id, type)
             .then((res) => {
                 this.allPackComment = res.data;
             }).catch(() => {
                 Swal.fire('Failed :','Getting all pack comment failed','warning');
             });
         },
-
-
 
        /**
         * End comment functions
@@ -459,13 +475,27 @@
         },
 
         setRating(rating) {
-            setTimeout(() => {
-                window.location.href = '/signup';
-            }, 500);
+            if(this.rate_state === 1){
+              Swal.fire('Sorry !', 'You have already rated this package','warning');
+            } else {
+
+                this.rating = rating;
+                Con.saveRatings(this.pack.id, this.rating)
+                .then((res) => {
+                    this.getRating(res.data.pack_id);
+                    this.getAuthRating(this.users.id, this.pack.id)
+                    this.getPackage();
+                }).catch((error) => {
+                    Swal.fire("Failed :" + error.response.data.error,'warning');
+                }).finally(() => {
+                    Toast.fire("Success :","Thanks for rating package","success")
+                });
+
+            }
         },
 
-        getRating(id, type) {
-            axios.get('/rating/' + id + '/' + type)
+        getRating(id) {
+            Con.getRatings(id)
             .then((res) => {
                 let myData = res.data;
                 this.totalUsers = myData.length;
@@ -475,29 +505,39 @@
                     sum += parseFloat(rate.rating);
                 });
 
-                let avg = sum/myData.length;
+                let avg = sum / myData.length;
                 if(avg > 0){
                    this.totalRating = parseFloat(avg.toFixed(1));
                 } else {
-                    this.totalRating = 0;
+                   this.totalRating = 0;
                 }
 
             }).catch(() => {
-                Swal.fire('Failed :','Getting all rating failed','warning');
+                Swal.fire('Failed :','Getting all book failed','warning');
             });
         },
 
+        getAuthRating(user_id, pack_id){
+            this.rate_state = '';
+            Con.getAuthUserRate(user_id, pack_id)
+            .then((res) => {
+                this.rate_state = res.data;
+            }).catch(() => {
+                Swal.fire('Failed :','Getting all book failed','warning');
+            });
+        },
 
         /**
          * Package function starts here
-         * */
+         *
+        */
 
         openModal(){
             $("#viewPackageDetails").modal('show');
         },
 
         viewPackDetails(pack){
-            this.isLoading = true;
+            this.viewLoading = true;
 
             this.pack.id = pack.id;
             this.pack.name = pack.name;
@@ -510,7 +550,9 @@
             this.getPackInstall(pack.id);
             this.getRating(pack.id, this.type);
             this.getPackageComments(pack.id, this.comment.type);
+            this.getAuthRating(this.users.id, pack.id)
             this.openModal();
+            this.viewLoading = false;
         },
 
         searchPackage(){
@@ -532,7 +574,7 @@
 
         getPackLang(id){
             this.allPackLang = [];
-            axios.get('/pack/lang/' + id)
+            axios.get('/get/pack/lang/' + id)
             .then((res) => {
                this.allPackLang = res.data;
             }).catch(() => {
@@ -542,7 +584,7 @@
 
         getPackInstall(id){
             this.allPackInstall = [];
-            axios.get('/pack/install/' + id)
+            axios.get('/get/pack/install/' + id)
             .then((res) => {
                 this.allPackInstall = res.data;
             }).catch(() => {
@@ -553,7 +595,7 @@
         getSearchPackage(id){
             this.tableLoading = true;
             this.allPackage = [];
-            axios.get('/pack/search/' + id + '/' + this.length)
+            axios.get('/get/pack/search/' + id + '/' + this.length)
             .then((res) => {
                 this.allPackage = res.data.data;
                 this.makePagination(res.data);
@@ -574,8 +616,8 @@
                 },
             };
 
-            page_url = page_url || '/package/' + this.length;
-            axios.get(page_url, config)
+            page_url = page_url || '/get/package/' + this.length;
+            axios.get(page_url)
             .then((res) => {
                 this.allPackage = res.data.data;
                 this.makePagination(res.data);
@@ -598,20 +640,18 @@
             };
             this.pagination = pagination;
         },
-        /**
-         * Package functions ends here
-        */
 
       },
 
       mounted(){
           this.getPackage();
           this.getCategory();
+          this.users = JSON.parse(this.authuser);
       },
 
       computed:{
 
-        filteredPackage(){
+        filteredHomePack(){
             let thePackage = this.allPackage;
             if(this.search){
                 thePackage = thePackage.filter((row) => {
@@ -623,7 +663,7 @@
             return thePackage;
         },
 
-      },
+     },
   }
 </script>
 
@@ -708,8 +748,9 @@ tbody td {
     font-size: 13px;
 }
 
-pre {
-    padding-bottom: -30px;
+.viewDetails tr th {
+    font-size: 13px;
 }
+
 
 </style>

@@ -29,15 +29,15 @@ Route::group(['middleware' => ['guest']], function () {
 
     // Get Data
     Route::get('/category','AdminController@getCategory');
-    Route::get('/package','PageController@getPackage');
+    Route::get('/package/{number}','PageController@getPackage');
 
 
     // Data with id
-    Route::get('/pack/search/{id}','PageController@getPackageSearch');
+    Route::get('/pack/search/{id}/{number}','PageController@getPackageSearch');
     Route::get('/pack/lang/{id}', 'AdminController@getPackLang');
     Route::get('/pack/install/{id}', 'AdminController@getPackInstall');
-    Route::get('/rating/{id}', 'PageController@getRating');
-    Route::get('/comment/{id}', 'PageController@getPackComment');
+    Route::get('/rating/{id}/{type}', 'PageController@getRating');
+    Route::get('/comment/{id}/{type}', 'PageController@getPackComment');
 
 
     /**
@@ -57,16 +57,14 @@ Route::group(['middleware' => ['guest']], function () {
 
 Route::group(['middleware' => ['auth', 'user']], function () {
 
-    /**
-     * Get Route
-    */
+    // Get Route
     Route::get('/dashboard','PageController@dashboardPage')->name('dashboard');
     Route::get('/logout','LoginController@logout')->name('logout');
 
 
-    //Get Data Routes
+    // Get Data Routes
     Route::get('/get/category','AdminController@getCategory');
-    Route::get('/get/package','PageController@getPackage');
+    Route::get('/get/package/{number}','PageController@getPackage');
     Route::get('/get/user/package/{number}','PageController@getPackageUser');
     Route::get('/get/category','AdminController@getCategory');
     Route::get('/get/language','AdminController@getLanguage');
@@ -75,18 +73,20 @@ Route::group(['middleware' => ['auth', 'user']], function () {
 
     // Route with numbers
     Route::get('/get/tutorial/{number}','AdminController@getUserTutorial');
+    Route::get('/get/all/tutorial/{number}/{type}', 'PageController@getTutorial');
+    Route::get('/get/search/tito/{id}/{number}/{type}', 'PageController@getSearchTutorial');
 
 
-    //Get Data with ID
-    Route::get('/get/pack/search/{id}','PageController@getPackageSearch');
+    // Get Data with ID
+    Route::get('/get/pack/search/{id}/{number}','PageController@getPackageSearch');
     Route::get('/get/pack/lang/{id}', 'AdminController@getPackLang');
     Route::get('/get/pack/install/{id}', 'AdminController@getPackInstall');
     Route::get('/get/rating/{id}', 'PageController@getRating');
-    Route::get('/get/comment/{id}', 'PageController@getPackComment');
+    Route::get('/get/comment/{id}/{type}', 'PageController@getPackComment');
     Route::get('/get/auth/rater/{user_id}/{pack_id}', 'PageController@getAuthRater');
 
 
-    //Post Routes
+    // Post Routes
     Route::post('/post/rating', 'PageController@rating');
     Route::post('/post/comment', 'PageController@comment');
     Route::post('/post/package','AdminController@savePackage');
