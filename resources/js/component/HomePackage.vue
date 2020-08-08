@@ -136,7 +136,7 @@
         </div>
 
         <!-- navigation -->
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" class="mb-5">
             <ul class="pagination pagination-md justify-content-center">
                 <li v-bind:class="[{disabled: !pagination.prev_page_url }]" class="page-item">
                     <a href="#" class="page-link" @click.prevent="getPackage(pagination.prev_page_url)"><b>Previous</b></a>
@@ -293,8 +293,8 @@
                             <table class="table" style="font-size:12px">
                                 <tbody>
                                     <tr v-show="allPackComment.length > 0" v-for="(com, index) in allPackComment" :key="index">
-                                        <td>
-                                                <img class="avatar" :src="'/image/user/' + com.profile " alt="profile" width="40px" height="40px">
+                                        <td width="35px">
+                                            <img class="avatar" :src="'/image/user/' + com.profile " alt="profile" width="30px" height="30px">
                                         </td>
                                         <td>
                                             {{ com.comment | upperCase }}
@@ -418,7 +418,7 @@
           this.addcomment = true;
         },
 
-        sendComment(){
+        async sendComment(){
             Con.saveComments(this.pack.id, this.comment.comment, this.comment.type)
             .then((res) => {
 
@@ -439,7 +439,7 @@
 
         },
 
-        getPackageComments(id, type){
+        async getPackageComments(id, type){
             this.allPackComment = [];
             Con.getComments(id, type)
             .then((res) => {
@@ -474,7 +474,7 @@
             }
         },
 
-        setRating(rating) {
+        async setRating(rating) {
             if(this.rate_state === 1){
               Swal.fire('Sorry !', 'You have already rated this package','warning');
             } else {
@@ -494,7 +494,7 @@
             }
         },
 
-        getRating(id) {
+        async getRating(id) {
             Con.getRatings(id)
             .then((res) => {
                 let myData = res.data;
@@ -517,7 +517,7 @@
             });
         },
 
-        getAuthRating(user_id, pack_id){
+        async getAuthRating(user_id, pack_id){
             this.rate_state = '';
             Con.getAuthUserRate(user_id, pack_id)
             .then((res) => {
@@ -536,7 +536,7 @@
             $("#viewPackageDetails").modal('show');
         },
 
-        viewPackDetails(pack){
+        async viewPackDetails(pack){
             this.viewLoading = true;
 
             this.pack.id = pack.id;
@@ -550,12 +550,12 @@
             this.getPackInstall(pack.id);
             this.getRating(pack.id, this.type);
             this.getPackageComments(pack.id, this.comment.type);
-            this.getAuthRating(this.users.id, pack.id)
+            this.getAuthRating(this.users.id, pack.id);
             this.openModal();
             this.viewLoading = false;
         },
 
-        searchPackage(){
+        async searchPackage(){
            if(this.pack.cat_id) {
               this.getSearchPackage(this.pack.cat_id);
            } else {
@@ -563,7 +563,7 @@
            }
         },
 
-        getCategory(){
+        async getCategory(){
             Con.getCategory()
             .then((response) => {
                 this.allCategory = response.data;
@@ -572,7 +572,7 @@
             });
         },
 
-        getPackLang(id){
+        async getPackLang(id){
             this.allPackLang = [];
             axios.get('/get/pack/lang/' + id)
             .then((res) => {
@@ -582,7 +582,7 @@
             });
         },
 
-        getPackInstall(id){
+        async getPackInstall(id){
             this.allPackInstall = [];
             axios.get('/get/pack/install/' + id)
             .then((res) => {
@@ -592,7 +592,7 @@
             });
         },
 
-        getSearchPackage(id){
+        async getSearchPackage(id){
             this.tableLoading = true;
             this.allPackage = [];
             axios.get('/get/pack/search/' + id + '/' + this.length)
@@ -606,7 +606,7 @@
             });
         },
 
-        getPackage(page_url){
+        async getPackage(page_url){
             this.tableLoading = true;
 
             const config = {

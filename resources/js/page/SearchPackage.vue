@@ -189,7 +189,7 @@
                                 <tr>
                                     <th>Website</th>
                                     <td>
-                                        <a :href="pack.link" class="link" title="Click to visit website">
+                                        <a :href="pack.link" class="link" title="Click to visit website" target="_blank">
                                         {{ pack.link }}
                                         </a>
                                     </td>
@@ -415,15 +415,15 @@
           this.addcomment = true;
         },
 
-        sendComment(){
+        async sendComment(){
             setTimeout(() => {
                 window.location.href = '/signup';
             }, 500);
         },
 
-        getPackageComments(id,type){
+        async getPackageComments(id,type){
             this.allPackComment = [];
-            axios.get('/comment/' + id + '/' + type)
+            await axios.get('/comment/' + id + '/' + type)
             .then((res) => {
                 this.allPackComment = res.data;
             }).catch(() => {
@@ -458,14 +458,14 @@
             }
         },
 
-        setRating(rating) {
+        async setRating(rating) {
             setTimeout(() => {
                 window.location.href = '/signup';
             }, 500);
         },
 
-        getRating(id, type) {
-            axios.get('/rating/' + id + '/' + type)
+        async getRating(id) {
+            await axios.get('/rating/' + id)
             .then((res) => {
                 let myData = res.data;
                 this.totalUsers = myData.length;
@@ -496,7 +496,7 @@
             $("#viewPackageDetails").modal('show');
         },
 
-        viewPackDetails(pack){
+        async viewPackDetails(pack){
             this.isLoading = true;
 
             this.pack.id = pack.id;
@@ -508,12 +508,12 @@
             this.pack.cat_name = pack.catname;
             this.getPackLang(pack.id);
             this.getPackInstall(pack.id);
-            this.getRating(pack.id, this.type);
+            this.getRating(pack.id);
             this.getPackageComments(pack.id, this.comment.type);
             this.openModal();
         },
 
-        searchPackage(){
+        async searchPackage(){
            if(this.pack.cat_id) {
               this.getSearchPackage(this.pack.cat_id);
            } else {
@@ -521,7 +521,7 @@
            }
         },
 
-        getCategory(){
+        async getCategory(){
             Con.getCategory()
             .then((response) => {
                 this.allCategory = response.data;
@@ -530,9 +530,9 @@
             });
         },
 
-        getPackLang(id){
+        async getPackLang(id){
             this.allPackLang = [];
-            axios.get('/pack/lang/' + id)
+            await axios.get('/pack/lang/' + id)
             .then((res) => {
                this.allPackLang = res.data;
             }).catch(() => {
@@ -540,9 +540,9 @@
             });
         },
 
-        getPackInstall(id){
+        async getPackInstall(id){
             this.allPackInstall = [];
-            axios.get('/pack/install/' + id)
+            await axios.get('/pack/install/' + id)
             .then((res) => {
                 this.allPackInstall = res.data;
             }).catch(() => {
@@ -550,10 +550,10 @@
             });
         },
 
-        getSearchPackage(id){
+        async getSearchPackage(id){
             this.tableLoading = true;
             this.allPackage = [];
-            axios.get('/pack/search/' + id + '/' + this.length)
+            await axios.get('/pack/search/' + id + '/' + this.length)
             .then((res) => {
                 this.allPackage = res.data.data;
                 this.makePagination(res.data);
@@ -564,7 +564,7 @@
             });
         },
 
-        getPackage(page_url){
+        async getPackage(page_url){
             this.tableLoading = true;
 
             const config = {
@@ -575,7 +575,7 @@
             };
 
             page_url = page_url || '/package/' + this.length;
-            axios.get(page_url, config)
+            await axios.get(page_url, config)
             .then((res) => {
                 this.allPackage = res.data.data;
                 this.makePagination(res.data);

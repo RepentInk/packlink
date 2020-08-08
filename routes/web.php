@@ -25,18 +25,22 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/sign-in/google/redirect','LoginController@googleRedirect');
     Route::get('/logout','LoginController@logout')->name('logout');
     Route::get('/search/package','PageController@searchPackagePage')->name('search.package');
-
+    Route::get('/search/video', 'PageController@searchVideoPage')->name('search.video');
 
     // Get Data
     Route::get('/category','AdminController@getCategory');
+    Route::get('/language', 'AdminController@getLanguage');
     Route::get('/package/{number}','PageController@getPackage');
+    Route::get('/tutorial/{number}/{type}', 'PageController@getTutorial');
+    Route::get('/tito/{id}/{number}/{type}', 'PageController@getSearchTutorial');
 
 
     // Data with id
     Route::get('/pack/search/{id}/{number}','PageController@getPackageSearch');
     Route::get('/pack/lang/{id}', 'AdminController@getPackLang');
     Route::get('/pack/install/{id}', 'AdminController@getPackInstall');
-    Route::get('/rating/{id}/{type}', 'PageController@getRating');
+    Route::get('/rating/{id}', 'PageController@getRating');
+    Route::get('/rating/{id}/{type}', 'PageController@getTitoRating');
     Route::get('/comment/{id}/{type}', 'PageController@getPackComment');
 
 
@@ -84,7 +88,8 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::get('/get/rating/{id}', 'PageController@getRating');
     Route::get('/get/comment/{id}/{type}', 'PageController@getPackComment');
     Route::get('/get/auth/rater/{user_id}/{pack_id}', 'PageController@getAuthRater');
-
+    Route::get('/get/auth/tito/{user}/{tito}/{type}','PageController@getAuthTitoRater');
+    Route::get('/get/tito/rating/{id}/{type}', 'PageController@getTitoRating');
 
     // Post Routes
     Route::post('/post/rating', 'PageController@rating');
@@ -94,6 +99,7 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::post('/post/installation','AdminController@saveInstallation');
     Route::post('/post/language','AdminController@saveLanguage');
     Route::post('/post/tutorial','AdminController@saveTutorial');
+    Route::post('/post/tito/rating', 'PageController@saveTutorial');
 
     //Update Routes
     Route::post('/update/profile', 'AdminController@updateUser');

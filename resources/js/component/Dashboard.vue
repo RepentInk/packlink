@@ -3,7 +3,7 @@
 
           <div class="row">
 
-             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3">
+             <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12">
                  <ul class="nav nav-tabs flex-column" role="tablist">
                     <li class="nav-item">
                       <a class="nav-link active" data-toggle="tab" href="#home">
@@ -33,10 +33,10 @@
 
              </div>
 
-             <div class="col-xl-10 col-lg-10 col-md-10 col-sm-9">
+             <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 m-0">
 
                  <!-- Tab panes -->
-                <div class="tab-content">
+                <div class="tab-content p-0">
 
                     <div id="home" class="container tab-pane active mb-5"><br>
                         <home-component :userinfo="userinfo"></home-component>

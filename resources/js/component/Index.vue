@@ -11,7 +11,7 @@
 
                             <div class="header">
                                 <span class="fas fa-people-carry"></span>
-                                <h4> Packages Collection </h4>
+                                <h4> Packages Collections </h4>
                             </div>
 
                             <div class="body">
@@ -31,8 +31,8 @@
                         <div class="mybox">
 
                             <div class="header">
-                                <span class="fas fa-people-carry"></span>
-                                <h4> Tutorial Collection </h4>
+                                <span class="far fa-file-video"></span>
+                                <h4> Video Tutorial Collections </h4>
                             </div>
 
                             <div class="body">
@@ -42,7 +42,7 @@
                             </div>
 
                             <div class="footer">
-                                  <a :href="'/search/package'">Browse Packages</a>
+                                  <a :href="'/search/video'">Browse Packages</a>
                             </div>
 
                         </div>
@@ -53,8 +53,8 @@
                         <div class="mybox">
 
                             <div class="header">
-                                <span class="fas fa-people-carry"></span>
-                                <h4> Reading Materials </h4>
+                                <span class="fas fa-book"></span>
+                                <h4> Reading Materials Collections </h4>
                             </div>
 
                             <div class="body">

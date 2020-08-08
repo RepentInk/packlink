@@ -28,7 +28,7 @@
                     <home-video-component :authuser="userinfo"></home-video-component>
                 </div>
                 <div id="homeDoc" class="pt-4 tab-pane fade" style="width:100%">
-                    <home-read-component></home-read-component>
+                    <home-read-component :auth="userinfo"></home-read-component>
                 </div>
             </div>
            </div>

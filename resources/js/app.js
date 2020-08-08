@@ -45,6 +45,7 @@ Vue.component('user-component', require('./page/Users').default);
 Vue.component('user-profile-component', require('./page/UserProfile').default);
 Vue.component('user-package-component', require('./page/Package').default);
 Vue.component('search-package-component', require('./page/SearchPackage').default);
+Vue.component('search-video-component', require('./page/SearchVideo').default);
 Vue.component('star-rating', StarRating);
 
 

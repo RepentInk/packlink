@@ -1,11 +1,12 @@
 <template>
-    <div>
+    <div class="container mb-5">
+
+        <h5 class="mt-3">Video Tutorial Collections </h5><hr>
+
         <div class="row">
 
-            <div class="col-xl-12 col-lg-12">
-
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <form class="form">
-
                     <div class="form-group">
                         <v-select v-model="tutorial.lang_id"
                                 :options="allLanguage"
@@ -15,12 +16,10 @@
                                 placeholder="Search by programming language">
                         </v-select>
                     </div>
-
                 </form>
+              </div>
 
-            </div>
-
-            <div class="col-xl-12 col-lg-12">
+               <div class="col-xl-12 col-lg-12">
                 <div>
                     <div class="form-group float-left">
                         <select class="form-select" v-model="length" @change="getVideoTutorials()">
@@ -225,7 +224,7 @@
                                         :show-rating="false"
                                         v-model="rating"
                                         @current-rating="showText"
-                                        @rating-selected="setRating">
+                                        @rating-selected="sendComment">
                                     </star-rating>
                                 </td>
                             </tr>
@@ -310,6 +309,7 @@
 
 
     </div>
+
 </template>
 <script>
 import 'vue-select/dist/vue-select.css';
@@ -319,12 +319,10 @@ export default {
     components : {
         VueLoading,
     },
-    props:['authuser'],
     data() {
         return {
            allLanguage:[],
            allVideoTutorial:[],
-           user:{},
            allTitoComment:[],
 
            search:'',
@@ -365,10 +363,6 @@ export default {
 
     methods: {
 
-        /**
-         * Comment functions goes here
-        */
-
         viewComment(){
           this.addcomment = false;
           this.viewcomment = true;
@@ -377,37 +371,6 @@ export default {
         addComment(){
           this.viewcomment = false;
           this.addcomment = true;
-        },
-
-        async sendComment(){
-            Con.saveComments(this.tutorial.id, this.comment.comment, this.comment.type)
-            .then((res) => {
-
-               this.comment.comment = "";
-               this.viewComment();
-               this.getTitoComments(this.tutorial.id, this.comment.type);
-
-            }).catch((error) => {
-
-                if(error.response.status === 402){
-                    Swal.fire("Failed :", error.response.data.error, "warning");
-                } else {
-                    let keys = Object.keys(error.response.data.error);
-                    Swal.fire("Failed",error.response.data.error[keys[0]][0],"warning");
-                }
-
-            });
-
-        },
-
-        async getTitoComments(id, type){
-            this.allTitoComment = [];
-            Con.getComments(id, type)
-            .then((res) => {
-                this.allTitoComment = res.data;
-            }).catch(() => {
-                Swal.fire('Failed :','Getting all pack comment failed','warning');
-            });
         },
 
         // rating functions
@@ -427,27 +390,24 @@ export default {
             }
         },
 
-        async setRating(rating) {
-            if(this.rate_state === 1){
-              Swal.fire('Sorry !', 'You have already rated this tutorial','warning');
-            } else {
-                this.rating = rating;
-                Con.saveTitoRatings(this.tutorial.id, this.rating, this.comment.type)
-                .then((res) => {
-                    console.log(res.data);
-                    this.getRating(res.data.tito_id, res.data.type);
-                    this.getAuthTitoRating(this.users.id, this.tutorial.id, this.comment.type);
-                    this.getVideoTutorials();
-                }).catch((error) => {
-                    Swal.fire("Failed :" + error.response.data.error,'warning');
-                }).finally(() => {
-                    Toast.fire("Success :","Thanks for rating tutorial","success")
-                });
-            }
+        async sendComment(){
+            setTimeout(() => {
+                window.location.href = '/signup';
+            }, 500);
+        },
+
+        async getTitoComments(id, type){
+            this.allTitoComment = [];
+            await axios.get('/comment/' + id + '/' + type)
+            .then((res) => {
+                this.allTitoComment = res.data;
+            }).catch(() => {
+                Swal.fire('Failed :','Getting all pack comment failed','warning');
+            });
         },
 
         async getRating(id, type) {
-            Con.getTitoRatings(id, type)
+            await axios.get('/rating/' + id + '/' + type)
             .then((res) => {
                 let myData = res.data;
                 this.totalUsers = myData.length;
@@ -469,20 +429,18 @@ export default {
             });
         },
 
-        async getAuthTitoRating(user_id, tito_id, type){
-            this.rate_state = '';
-            Con.getAuthUserTitoRate(user_id, tito_id, type)
-            .then((res) => {
-                this.rate_state = res.data;
+        async getAllProgLanguage(){
+           await axios.get('/language')
+           .then((res) => {
+               this.allLanguage = res.data;
             }).catch(() => {
-                Swal.fire('Failed :','Getting all auth rating failed','warning');
+               Swal.fire('Failed :','Getting all language failed','warning');
             });
         },
 
-        // tutorial function
         async getVideoTutorials(page_url){
             this.tableLoading = true;
-            page_url = page_url || '/get/all/tutorial/' + this.length + '/' + this.tutorial.type;
+            page_url = page_url || '/tutorial/' + this.length + '/' + this.tutorial.type;
             axios.get(page_url)
             .then((res) => {
               this.allVideoTutorial = res.data.data;
@@ -496,7 +454,7 @@ export default {
 
         async searchVideoTutorial(id){
            this.tableLoading = true;
-           axios.get('/get/search/tito/' + id + '/' + this.length + '/' + this.tutorial.type)
+           axios.get('/tito/' + id + '/' + this.length + '/' + this.tutorial.type)
            .then(res => {
                this.allVideoTutorial = res.data.data;
                this.makePagination(res.data);
@@ -528,15 +486,6 @@ export default {
             this.pagination = pagination;
         },
 
-        async getAllProgLanguage(){
-           Con.getLanguage()
-           .then((res) => {
-               this.allLanguage = res.data;
-           }).catch(() => {
-               Swal.fire('Failed :','Getting all language failed','warning');
-           });
-        },
-
         openTitoModal(){
             $("#viewTutorialDetails").modal('show');
         },
@@ -551,17 +500,15 @@ export default {
             this.tutorial.lang_name = tito.langname;
             this.getRating(tito.id, this.comment.type);
             this.getTitoComments(tito.id, this.comment.type);
-            this.getAuthTitoRating(this.users.id, tito.id, this.comment.type);
             this.openTitoModal();
             this.viewLoading = false;
         }
 
     },
 
-    mounted() {
+    created() {
         this.getAllProgLanguage();
         this.getVideoTutorials();
-        this.users = JSON.parse(this.authuser);
     },
 
     computed: {
@@ -580,7 +527,6 @@ export default {
 }
 </script>
 <style scoped>
-
 .comment .active {
    color: #F48024;
 }
@@ -636,5 +582,4 @@ tbody td {
 .viewDetails tr th {
     font-size: 13px;
 }
-
 </style>

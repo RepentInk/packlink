@@ -97,7 +97,7 @@
                 this.user.userPassword = '';
             },
 
-            submitLogin(){
+            async submitLogin(){
                 let formdata = new FormData();
 
                 formdata.append('email', this.user.userEmail);

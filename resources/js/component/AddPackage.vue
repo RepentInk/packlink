@@ -131,7 +131,7 @@
             this.$refs.pack.openPackModal();
         },
 
-        getPackageUser(page_url){
+        async getPackageUser(page_url){
             this.userPackLoading = true;
             page_url = page_url || '/get/user/package/' + this.length;
             axios.get(page_url)
@@ -157,7 +157,7 @@
             this.pagination = pagination;
         },
 
-        deleteUserPackage(id){
+        async deleteUserPackage(id){
             Swal.fire({
                 title: 'Are you sure ?',
                 text: "Tutorial will be deleted",

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Package;
 use App\Rating;
+use App\TitoRating;
 use App\User;
 use App\YouTube;
 use Illuminate\Http\Request;
@@ -30,6 +31,10 @@ class PageController extends Controller
 
     public function searchPackagePage(){
         return view('pages.search');
+    }
+
+    public function searchVideoPage(){
+        return view('pages.video');
     }
 
 
@@ -117,7 +122,6 @@ class PageController extends Controller
                   ->orderBy('totalraters','desc')
                   ->where('you_tubes.type', $type)
                   ->paginate($number);
-
         return response()->json($video_tutorial);
     }
 
@@ -137,6 +141,19 @@ class PageController extends Controller
         return response()->json($video_tutorial);
     }
 
+    public function getTitoRating($id, $type){
+       $response = TitoRating::getTitoRating($id, $type);
+       return response()->json($response);
+    }
+
+    public function getAuthTitoRater($user_id, $tito_id, $type){
+        $rated = TitoRating::where('user_id', $user_id)->where('tito_id', $tito_id)->where('type', $type)->first();
+        if($rated) {
+            return '1';
+        } else {
+            return '0';
+        }
+    }
 
 
     /**
@@ -149,6 +166,11 @@ class PageController extends Controller
 
     public function comment(Request $request){
         $response = Comment::saveComment($request);
+        return $response;
+    }
+
+    public function saveTutorial(Request $request){
+        $response = TitoRating::saveTitoRating($request);
         return $response;
     }
 

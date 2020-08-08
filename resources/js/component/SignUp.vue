@@ -147,7 +147,7 @@
             },
 
 
-            submitForm(){
+            async submitForm(){
                 const form = new FormData();
 
                 form.append("name", this.user.name);

@@ -36,12 +36,12 @@ export default {
         return axios.get('/get/rating/' + id);
     },
 
-    getTitoRatings(id) {
-
+    getTitoRatings(id, type) {
+        return axios.get('/get/tito/rating/' + id + '/' + type);
     },
 
-    getAuthUserTitoRate(user_id, tito_id) {
-
+    getAuthUserTitoRate(user_id, tito_id, type) {
+        return axios.get('get/auth/tito/' + user_id + '/' + tito_id + '/' + type);
     },
 
     /**
@@ -119,7 +119,13 @@ export default {
     },
 
     saveTitoRatings(tito_id, rating, type) {
+        let formData = new FormData();
 
+        formData.append('tito_id', tito_id);
+        formData.append('rating', rating);
+        formData.append('type', type);
+
+        return axios.post('/post/tito/rating', formData);
     },
 
 

@@ -128,7 +128,7 @@
                this.$refs.tuto.openModalTito();
             },
 
-            fetchUserTito(page_url){
+            async fetchUserTito(page_url){
                 this.isLoading = true;
                 page_url = page_url || '/get/tutorial/' + this.number;
                 fetch(page_url)
@@ -142,7 +142,7 @@
                 });
             },
 
-            deleteTito(id){
+            async deleteTito(id){
                 Swal.fire({
                     title: 'Are you sure ?',
                     text: "Tutorial will be deleted",
