@@ -11,6 +11,11 @@
 
      <div id="app">
 
+         {{--  //login component  --}}
+          <login-component></login-component>
+
+          <profile-component userinfo="{{ Auth::user() }}"></profile-component>
+
           @yield('section')
 
           @include('partials._pageFooter')

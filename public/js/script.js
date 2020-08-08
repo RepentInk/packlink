@@ -1,6 +1,7 @@
 var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 
+
 function resize() {
     var box = c.getBoundingClientRect();
     c.width = box.width;
@@ -12,9 +13,40 @@ var light = {
     y: 200
 }
 
-var colors = ["#f5c156", "#e6616b", "#5cd3ad"];
+var colors = ["#f5c156", "#e6616b", "#EFF0F1"];
+
+function fragmentText(text, maxWidth) {
+    var words = text.split(' '),
+        lines = [],
+        line = "";
+    if (ctx.measureText(text).width < maxWidth) {
+        return [text];
+    }
+    while (words.length > 0) {
+        while (ctx.measureText(words[0]).width >= maxWidth) {
+            var tmp = words[0];
+            words[0] = tmp.slice(0, -1);
+            if (words.length > 1) {
+                words[1] = tmp.slice(-1) + words[1];
+            } else {
+                words.push(tmp.slice(-1));
+            }
+        }
+        if (ctx.measureText(line + words[0]).width < maxWidth) {
+            line += words.shift() + " ";
+        } else {
+            lines.push(line);
+            line = "";
+        }
+        if (words.length === 0) {
+            lines.push(line);
+        }
+    }
+    return lines;
+}
 
 function drawLight() {
+
     ctx.beginPath();
     ctx.arc(light.x, light.y, 1000, 0, 2 * Math.PI);
     var gradient = ctx.createRadialGradient(light.x, light.y, 0, light.x, light.y, 1000);
@@ -30,7 +62,25 @@ function drawLight() {
     gradient.addColorStop(1, "#3b4654");
     ctx.fillStyle = gradient;
     ctx.fill();
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 33px serif";
+    ctx.textAlign = 'center';
+    ctx.fontWeight = "700px";
+    ctx.fillText("Pack Joint", (canvas.width / 2) - 17, (canvas.height / 2) - 20);
+
+    var text = "We build products that empower developers and connect them to solutions that enable productivity, growth, and discovery.";
+
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "normal 20px sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fontWeight = "400px";
+    ctx.measureText(text).width;
+    ctx.fillText(text, (canvas.width / 2) - 17, (canvas.height / 2) + 30);
+
 }
+
 
 function Box() {
     this.half_size = Math.floor((Math.random() * 50) + 1);
