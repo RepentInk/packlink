@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Comment;
+use App\Installation;
+use App\Language;
 use App\Package;
 use App\Rating;
 use App\TitoRating;
@@ -35,6 +38,36 @@ class PageController extends Controller
 
     public function searchVideoPage(){
         return view('pages.video');
+    }
+
+    public function searchReadPage(){
+        return view('pages.read');
+    }
+
+
+    // data without number
+    public function getCategory() {
+        $category = Category::where('deleted_at', null)
+                    ->select('id', 'name')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+        return response()->json($category);
+    }
+
+    public function getLanguage() {
+        $language = Language::where('deleted_at', null)
+                    ->select('id', 'name')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+        return response()->json($language);
+    }
+
+    public function getInstallation() {
+        $installation = Installation::where('deleted_at', null)
+            ->select('id', 'name')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return response()->json($installation);
     }
 
 
@@ -173,6 +206,5 @@ class PageController extends Controller
         $response = TitoRating::saveTitoRating($request);
         return $response;
     }
-
 
 }

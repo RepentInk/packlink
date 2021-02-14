@@ -54,7 +54,7 @@
 
                             <div class="header">
                                 <span class="fas fa-book"></span>
-                                <h4> Reading Materials Collections </h4>
+                                <h4> Reading Materials </h4>
                             </div>
 
                             <div class="body">
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="footer">
-                                  <a :href="'/search/package'">Browse Packages</a>
+                                  <a :href="'/search/read'">Browse Packages</a>
                             </div>
 
                         </div>

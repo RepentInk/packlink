@@ -45,55 +45,62 @@ class AdminController extends Controller
         return view('admin.package');
     }
 
+    public function tutorialPage(){
+        return view('admin.tutorial');
+    }
+
+    public function sponserPage(){
+        return view('admin.sponser');
+    }
+
 
 
     /**
      * Get Data
     */
-    public function getUsers(){
-        $users = User::where('deleted_at', null)->select('id','nickname','name','email','user_type','profile','location','title',
-        'about','created_at')->orderBy('created_at','desc')->get();
-
+    public function getUsers($number){
+        $users = User::where('deleted_at', null)
+                ->select('id','nickname','name','email','user_type','profile','location','title','about','created_at')
+                ->orderBy('created_at','desc')
+                ->paginate($number);
         return response()->json($users);
     }
 
-
-    public function getCategory(){
+    public function getCategory($number){
         $category = Category::where('deleted_at', null)
-                ->select('id','name','created_at')
-                ->orderBy('created_at','desc')
-                ->get();
+                 ->select('id','name','created_at')
+                 ->orderBy('created_at','desc')
+                 ->paginate($number);
         return response()->json($category);
     }
 
-    public function getLanguage(){
+    public function getLanguage($number){
         $language = Language::where('deleted_at', null)
                 ->select('id','name','created_at')
                 ->orderBy('created_at','desc')
-                ->get();
+                ->paginate($number);
         return response()->json($language);
     }
 
-    public function getInstallation(){
+    public function getInstallation($number){
         $installation = Installation::where('deleted_at', null)
                 ->select('id','name','created_at')
                 ->orderBy('created_at','desc')
-                ->get();
+                ->paginate($number);
         return response()->json($installation);
     }
 
-    public function getPackage(){
+    public function getPackage($number){
         $package = Package::leftJoin('users','packages.user_id','=','users.id')
                   ->leftJoin('categories','packages.cat_id','=','categories.id')
                   ->select('packages.id','packages.name','packages.link','packages.command','packages.procedure',
                   'packages.description','users.nickname','categories.name as catname','categories.id as catid',
                   'packages.created_at')
                   ->orderBy('packages.created_at','desc')
-                  ->get();
+                  ->paginate($number);
 
         return response()->json($package);
     }
-
 
     public function getUserTutorial($number){
          $tutorial = YouTube::leftJoin('languages','you_tubes.lang_id','=', 'languages.id')
@@ -102,6 +109,16 @@ class AdminController extends Controller
                     ->where('you_tubes.user_id','=', Auth::id())
                     ->orderBy('you_tubes.created_at','desc')
                     ->paginate($number);
+
+        return response()->json($tutorial);
+    }
+
+    public function getTutorial($number) {
+        $tutorial = YouTube::leftJoin('languages', 'you_tubes.lang_id', '=', 'languages.id')
+            ->select('you_tubes.id','you_tubes.name','you_tubes.url','you_tubes.title','you_tubes.type',
+            'you_tubes.description','you_tubes.lang_id','languages.name as lang_name','you_tubes.created_at')
+            ->orderBy('you_tubes.created_at', 'desc')
+            ->paginate($number);
 
         return response()->json($tutorial);
     }

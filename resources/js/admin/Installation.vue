@@ -31,7 +31,7 @@
                         <div>
                             <div class="form-group float-left">
                                 <label>Select :</label>
-                                <select class="form-control" v-model="length" @input="resetPagination()">
+                                <select class="form-control" v-model="length" @change="getInstallation()">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="50">50</option>
@@ -42,8 +42,7 @@
                             </div>
                             <div class="form-group float-right">
                                 <label>Search :</label>
-                                <input type="text" class="form-control" v-model="search" @input="resetPagination()"
-                                       placeholder="Enter to search">
+                                <input type="text" class="form-control" v-model="search" placeholder="Enter to search">
                             </div>
                         </div>
 
@@ -64,7 +63,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(install,index) in paginated" :key="install.id">
+                                    <tr v-for="(install,index) in filteredInstallation" :key="install.id">
                                         <td>{{ index += 1}}</td>
                                         <td>{{ install.name | upperCase }} </td>
                                         <td>{{ install.created_at | dateOnly }}</td>
@@ -89,35 +88,22 @@
                     </div>
 
                     <div class="card-footer text-center">
-                        <nav class="myNav" aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li v-bind:class="[{disabled: !pagination.prevPage }]" class="active">
-                                    <a href="#" class="page-link" @click.prevent="substraction()">
-                                        <b>Previous</b>
-                                    </a>
+                        <nav aria-label="Page navigation example" style="margin-bottom:70px">
+                            <ul class="pagination pagination-md justify-content-center">
+                                <li v-bind:class="[{disabled: !pagination.prev_page_url }]" class="page-item">
+                                    <a href="#" class="page-link" @click.prevent="getInstallation(pagination.prev_page_url)"><b>Previous</b></a>
                                 </li>
 
                                 <li class="page-item disabled">
-                                    <a class="page-link " href="#" style="color: black">
-                                        Page
-                                        <b>{{ pagination.currentPage }}</b>
-                                        of
-                                        <b>{{ pagination.page }}</b>
-                                    </a>
+                                    <a class="page-link text-dark" href="#">Page <b>{{ pagination.current_page }}</b> of <b>{{ pagination.last_page }}</b></a>
                                 </li>
 
-                                <li v-bind:class="[{disabled: !pagination.nextPage }]" class="active">
-                                    <a href="#" class="page-link" @click.prevent="addition()">
-                                        <b>Next</b>
-                                    </a>
+                                <li v-bind:class="[{disabled: !pagination.next_page_url }]" class="page-item">
+                                    <a href="#" class="page-link" @click.prevent="getInstallation(pagination.next_page_url)"><b>Next</b></a>
                                 </li>
 
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" style="color: black"> From
-                                        <b>{{ pagination.from}}</b> to
-                                        <b>{{ pagination.to}}</b> out of
-                                        <b>{{ pagination.total }}</b>
-                                    </a>
+                                <li class="page-item disabled sm-hidden xs-hidden">
+                                    <a class="page-link text-dark" href="#"> From <b>{{ pagination.from_page }}</b> to <b>{{ pagination.to_page }}</b> out of <b>{{ pagination.total_page }}</b></a>
                                 </li>
                             </ul>
                         </nav>
@@ -234,15 +220,7 @@
                     id:'',
                     name:'',
                 },
-                pagination:{
-                    currentPage:1,
-                    nextPage:'',
-                    prevPage:'',
-                    total:'',
-                    from:'',
-                    to:'',
-                    page:'',
-                },
+                pagination:{},
                 search:'',
                 length:10,
                 showImage:[],
@@ -253,25 +231,31 @@
 
         methods: {
 
-            getInstallation(){
-
-                const config = {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                };
-
-                axios.get('/admin/get/installation', config)
+            async getInstallation(page_url){
+                this.tableLoading = true;
+                page_url = page_url || '/admin/get/installation/' + this.length;
+                await axios.get(page_url)
                 .then((response) => {
-                    this.tableLoading = true;
-                    this.allInstallation = response.data;
+                    this.allInstallation = response.data.data;
+                    this.makePagination(response.data);
                 }).catch(() => {
                    Swal.fire('Failed :','Loading all installation failed','warning');
                 }).finally(() => {
                     this.tableLoading = false;
                 });
+            },
 
+            makePagination(res){
+                let pagination = {
+                    current_page : res.current_page,
+                    last_page : res.last_page,
+                    next_page_url : res.next_page_url,
+                    prev_page_url : res.prev_page_url,
+                    from_page : res.from,
+                    to_page : res.to,
+                    total_page : res.total
+                };
+                this.pagination = pagination;
             },
 
             openAddModal(){
@@ -283,7 +267,7 @@
                 $("#editInstallationModel").modal('show');
             },
 
-            showData(installation) {
+            async showData(installation) {
                 this.installation.id = installation.id;
                 this.installation.name = installation.name;
                 this.openEditModal();
@@ -294,13 +278,13 @@
                 this.installation.name = '';
             },
 
-            submitInstallationForm(){
+            async submitInstallationForm(){
                 this.isLoading = true;
                 let form = new FormData();
 
                 form.append('name', this.installation.name);
 
-                axios.post('/admin/post/installation', form)
+                await axios.post('/admin/post/installation', form)
                 .then(() => {
                     Toast.fire("Success :","Installation saved successfully","success");
                 }).catch((error) => {
@@ -321,14 +305,14 @@
 
             },
 
-            editInstallationForm(){
+            async editInstallationForm(){
                 this.isLoading = true;
                 let form = new FormData();
 
                 form.append('id', this.installation.id);
                 form.append('name', this.installation.name);
 
-                axios.post('/admin/update/installation', form)
+                await axios.post('/admin/update/installation', form)
                 .then(() => {
                     Toast.fire("Success :","Installation updated successfully","success");
                 }).catch((error) => {
@@ -349,7 +333,7 @@
 
             },
 
-            deleteInstallation(id){
+            async deleteInstallation(id){
                 Swal.fire({
                     title: 'Are you sure ?',
                     text: "Installation will be deleted",
@@ -372,39 +356,6 @@
 
                     }
                 });
-            },
-
-            substraction(){
-                if(this.pagination.currentPage <=  1){
-                    Toast.fire('Page Limit :', 'Sorry cant go further', 'warning');
-                } else {
-                    --this.pagination.currentPage;
-                }
-            },
-
-            addition(){
-                if(this.pagination.currentPage == this.pagination.page){
-                    Toast.fire('Page Limit :', 'Sorry cant go further', 'warning');
-                } else {
-                    ++this.pagination.currentPage;
-                }
-            },
-
-            paginate(array, length, pageNumber){
-                this.pagination.from = array.length ? ((pageNumber - 1) * length) + 1 : ' ';
-                this.pagination.to = pageNumber * length > array.length ? array.length : pageNumber * length;
-                this.pagination.prevPage = pageNumber > 1 ? pageNumber : '';
-                this.pagination.nextPage = array.length > this.pagination.to ? pageNumber + 1 : '';
-                this.pagination.page = Math.ceil(array.length / length);
-                this.pagination.total = array.length;
-
-                return array.slice((pageNumber - 1) * length, pageNumber * length);
-            },
-
-            resetPagination(){
-                this.pagination.currentPage  = 1;
-                this.pagination.prevPage = '';
-                this.pagination.nextPage = '';
             },
 
         },
@@ -431,10 +382,6 @@
                     })
                 }
                 return installation;
-            },
-
-            paginated(){
-                return this.paginate(this.filteredInstallation, this.length, this.pagination.currentPage);
             },
 
         },

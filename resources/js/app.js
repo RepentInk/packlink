@@ -46,6 +46,7 @@ Vue.component('user-profile-component', require('./page/UserProfile').default);
 Vue.component('user-package-component', require('./page/Package').default);
 Vue.component('search-package-component', require('./page/SearchPackage').default);
 Vue.component('search-video-component', require('./page/SearchVideo').default);
+Vue.component('search-read-component', require('./page/SearchRead').default);
 Vue.component('star-rating', StarRating);
 
 
@@ -57,7 +58,8 @@ Vue.component('admin-category-component', require('./admin/Category').default);
 Vue.component('admin-language-component', require('./admin/Language').default);
 Vue.component('admin-installation-component', require('./admin/Installation').default);
 Vue.component('admin-package-component', require('./admin/Package').default);
-
+Vue.component('admin-tutorial-component', require('./admin/Tutorial').default);
+Vue.component('admin-sponser-component', require('./admin/Sponser').default);
 
 const app = new Vue({
     el: '#app'

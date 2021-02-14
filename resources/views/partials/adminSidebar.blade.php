@@ -25,7 +25,7 @@
             <a class="nav-link" href="{{ route('admin.category') }}">
                 <i class="menu-icon mdi mdi-codepen text-warning"></i>
                 <span class="menu-title" style="font-size:16px">
-                    Category
+                    Categories
                 </span>
             </a>
         </li>
@@ -35,7 +35,7 @@
             <a class="nav-link" href="{{ route('admin.language') }}">
                 <i class="menu-icon mdi mdi-cube text-secondary"></i>
                 <span class="menu-title" style="font-size:16px">
-                    Language
+                    Languages
                 </span>
             </a>
         </li>
@@ -45,7 +45,7 @@
             <a class="nav-link" href="{{ route('admin.installation') }}">
                 <i class="menu-icon mdi mdi-book-open text-success"></i>
                 <span class="menu-title"  style="font-size:16px">
-                    Installation
+                    Installations
                 </span>
             </a>
         </li>
@@ -60,36 +60,23 @@
             </a>
         </li>
 
-         {{--
-
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.message') }}">
-                <i class="menu-icon mdi mdi-comment" style="color: #1aff1b"></i>
+            <a class="nav-link" href="{{ route('admin.tutorial') }}">
+                <i class="menu-icon mdi mdi-book" style="color: #1aff1b"></i>
                 <span class="menu-title"  style="font-size:16px">
-                    Messages
+                    Tutorials
                 </span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.donor') }}">
+            <a class="nav-link" href="{{ route('admin.sponser') }}">
                 <i class="menu-icon mdi mdi-account-star" style="color: #ff7221"></i>
                 <span class="menu-title"  style="font-size:16px">
-                    Donors
+                    Sponsers
                 </span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.transaction') }}">
-                <i class="menu-icon mdi mdi-cash" style="color: #a91dff"></i>
-                <span class="menu-title"  style="font-size:16px">
-                    Transaction
-                </span>
-            </a>
-        </li>  --}}
-
-
 
         <li class="nav-item" style="margin-top: 30px"></li>
 

@@ -66,9 +66,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(pack,index) in paginated" :key="pack.id">
+                                    <tr v-for="(pack,index) in filteredPackage" :key="pack.id">
                                         <td>{{ index += 1}}</td>
-                                        <td>{{ pack.name | upperCase }} </td>
+                                        <td>{{ pack.name | upperCase | reduceText(20, '...') }} </td>
                                         <td>{{ pack.link | reduceText(20, '...')}}</td>
                                         <td>{{ pack.command | reduceText(20, '...') }}</td>
                                         <td>{{ pack.created_at | dateOnly }}</td>
@@ -93,35 +93,22 @@
                     </div>
 
                     <div class="card-footer text-center">
-                        <nav class="myNav" aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li v-bind:class="[{disabled: !pagination.prevPage }]" class="active">
-                                    <a href="#" class="page-link" @click.prevent="substraction()">
-                                        <b>Previous</b>
-                                    </a>
+                        <nav aria-label="Page navigation example" style="margin-bottom:70px">
+                            <ul class="pagination pagination-md justify-content-center">
+                                <li v-bind:class="[{disabled: !pagination.prev_page_url }]" class="page-item">
+                                    <a href="#" class="page-link" @click.prevent="getLanguage(pagination.prev_page_url)"><b>Previous</b></a>
                                 </li>
 
                                 <li class="page-item disabled">
-                                    <a class="page-link " href="#" style="color: black">
-                                        Page
-                                        <b>{{ pagination.currentPage }}</b>
-                                        of
-                                        <b>{{ pagination.page }}</b>
-                                    </a>
+                                    <a class="page-link text-dark" href="#">Page <b>{{ pagination.current_page }}</b> of <b>{{ pagination.last_page }}</b></a>
                                 </li>
 
-                                <li v-bind:class="[{disabled: !pagination.nextPage }]" class="active">
-                                    <a href="#" class="page-link" @click.prevent="addition()">
-                                        <b>Next</b>
-                                    </a>
+                                <li v-bind:class="[{disabled: !pagination.next_page_url }]" class="page-item">
+                                    <a href="#" class="page-link" @click.prevent="getLanguage(pagination.next_page_url)"><b>Next</b></a>
                                 </li>
 
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" style="color: black"> From
-                                        <b>{{ pagination.from}}</b> to
-                                        <b>{{ pagination.to}}</b> out of
-                                        <b>{{ pagination.total }}</b>
-                                    </a>
+                                <li class="page-item disabled sm-hidden xs-hidden">
+                                    <a class="page-link text-dark" href="#"> From <b>{{ pagination.from_page }}</b> to <b>{{ pagination.to_page }}</b> out of <b>{{ pagination.total_page }}</b></a>
                                 </li>
                             </ul>
                         </nav>
@@ -367,15 +354,7 @@
                     lang_name:[],
                     install_name:[],
                 },
-                pagination:{
-                    currentPage:1,
-                    nextPage:'',
-                    prevPage:'',
-                    total:'',
-                    from:'',
-                    to:'',
-                    page:'',
-                },
+                pagination:{},
                 search:'',
                 length:10,
                 showImage:[],
@@ -386,7 +365,7 @@
 
         methods: {
 
-            showInstall(value){
+            async showInstall(value){
                 let diff = this.getDifference(this.pack.install_name, value);
                 let id = 0;
                 diff.forEach(v =>{
@@ -397,7 +376,7 @@
                 axios.delete('/admin/delete/pack/install/' + id)
             },
 
-            showLang(value){
+            async showLang(value){
                 let diff = this.getDifference(this.pack.lang_name, value);
                 let id = 0;
                 diff.forEach(v =>{
@@ -414,58 +393,65 @@
                 return difference;
             },
 
-            getPackage(){
-                const config = {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                };
-
-                axios.get('/admin/get/package', config)
+            async getPackage(page_url){
+                this.tableLoading = true;
+                page_url = page_url || '/admin/get/package/' + this.length;
+                await axios.get(page_url)
                 .then((response) => {
-                    this.tableLoading = true;
-                    this.allPackage = response.data;
+                    this.allPackage = response.data.data;
+                    this.makePagination(response.data);
                 }).catch(() => {
                    Swal.fire('Failed :','Loading all packages failed','warning');
                 }).finally(() => {
                     this.tableLoading = false;
                 });
-
             },
 
-            getCategory(){
-                axios.get('/admin/get/category')
+            makePagination(res){
+                let pagination = {
+                    current_page : res.current_page,
+                    last_page : res.last_page,
+                    next_page_url : res.next_page_url,
+                    prev_page_url : res.prev_page_url,
+                    from_page : res.from,
+                    to_page : res.to,
+                    total_page : res.total
+                };
+                this.pagination = pagination;
+            },
+
+            async getCategory(){
+                await axios.get('/admin/get/category/' + 2000)
                 .then((response) => {
-                    this.allCategory = response.data;
+                    this.allCategory = response.data.data;
                 }).catch(() => {
                     Swal.fire('Failed :','Loading all category failed','warning');
                 });
             },
 
-            getLanguage(){
-                axios.get('/admin/get/language')
+            async getLanguage(){
+                await axios.get('/admin/get/language/' + 2000)
                 .then((response) => {
-                    this.allLanguage = response.data;
+                    this.allLanguage = response.data.data;
                 }).catch(() => {
                    Swal.fire('Failed :','Loading all language failed','warning');
                 });
             },
 
-            getInstallation(){
-                axios.get('/admin/get/installation')
+            async getInstallation(){
+                await axios.get('/admin/get/installation/' + 2000)
                 .then((response) => {
-                    this.allInstallation = response.data;
+                    this.allInstallation = response.data.data;
                 }).catch(() => {
                     Swal.fire('Failed :','Loading all installation failed','warning');
                 });
             },
 
-            getPackLang(id){
+            async getPackLang(id){
                 this.allPackLang = [];
                 this.pack.lang_id = [];
                 this.pack.lang_name = [];
-                axios.get('/admin/get/pack/lang/' + id)
+                await axios.get('/admin/get/pack/lang/' + id)
                 .then((res) => {
 
                     this.allPackLang = res.data;
@@ -479,11 +465,11 @@
                 });
             },
 
-            getPackInstall(id){
+            async getPackInstall(id){
                 this.allPackInstall = [];
                 this.pack.install_id = [];
                 this.pack.install_name = [];
-                axios.get('/admin/get/pack/install/' + id)
+                await axios.get('/admin/get/pack/install/' + id)
                 .then((res) => {
 
                     this.allPackInstall = res.data;
@@ -506,7 +492,7 @@
                 $("#editPackageModel").modal('show');
             },
 
-            showData(pack) {
+            async showData(pack) {
                 this.isLoading = true;
                 this.pack.id = pack.id;
                 this.pack.name = pack.name;
@@ -537,8 +523,7 @@
                 this.pack.install_name = [];
             },
 
-
-            submitPackageForm(){
+            async submitPackageForm(){
                 this.isLoading = true;
                 let form = new FormData();
 
@@ -557,7 +542,7 @@
                   form.append('lang_id[]', element);
                 });
 
-                axios.post('/admin/post/package', form)
+                await axios.post('/admin/post/package', form)
                 .then(() => {
                     $("#addPackageModel").modal('hide');
                     Toast.fire("Success :","Package saved successfully","success");
@@ -586,7 +571,7 @@
                 return true;
             },
 
-            editPackageForm(){
+            async editPackageForm(){
                 this.isLoading = true;
                 let form = new FormData();
 
@@ -607,7 +592,7 @@
                 });
 
 
-                axios.post('/admin/update/package', form)
+                await axios.post('/admin/update/package', form)
                 .then(() => {
                     $("#editPackageModel").modal('hide');
                     Toast.fire("Success :","Package updated successfully", "success");
@@ -627,7 +612,7 @@
 
             },
 
-            deletePackage(id){
+            async deletePackage(id){
                 Swal.fire({
                     title: 'Are you sure ?',
                     text: "Package will be deleted",
@@ -650,39 +635,6 @@
 
                     }
                 });
-            },
-
-            substraction(){
-                if(this.pagination.currentPage <=  1){
-                    Toast.fire('Page Limit :', 'Sorry cant go further', 'warning');
-                } else {
-                    --this.pagination.currentPage;
-                }
-            },
-
-            addition(){
-                if(this.pagination.currentPage == this.pagination.page){
-                    Toast.fire('Page Limit :', 'Sorry cant go further', 'warning');
-                } else {
-                    ++this.pagination.currentPage;
-                }
-            },
-
-            paginate(array, length, pageNumber){
-                this.pagination.from = array.length ? ((pageNumber - 1) * length) + 1 : ' ';
-                this.pagination.to = pageNumber * length > array.length ? array.length : pageNumber * length;
-                this.pagination.prevPage = pageNumber > 1 ? pageNumber : '';
-                this.pagination.nextPage = array.length > this.pagination.to ? pageNumber + 1 : '';
-                this.pagination.page = Math.ceil(array.length / length);
-                this.pagination.total = array.length;
-
-                return array.slice((pageNumber - 1) * length, pageNumber * length);
-            },
-
-            resetPagination(){
-                this.pagination.currentPage  = 1;
-                this.pagination.prevPage = '';
-                this.pagination.nextPage = '';
             },
 
         },
@@ -712,10 +664,6 @@
                     })
                 }
                 return thepackage;
-            },
-
-            paginated(){
-                return this.paginate(this.filteredPackage, this.length, this.pagination.currentPage);
             },
 
         },
