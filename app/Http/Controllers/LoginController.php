@@ -20,9 +20,6 @@ class LoginController extends Controller
        return view('pages.signup');
     }
 
-
-
-
     /**
      * Actions
      *
@@ -75,7 +72,8 @@ class LoginController extends Controller
        return Socialite::driver('github')->redirect();
     }
 
-    public function githubRedirect(){
+    public function githubRedirect()
+    {
        try {
 
         $user = Socialite::driver('github')->user();
@@ -112,12 +110,14 @@ class LoginController extends Controller
     }
 
 
-    public function google(){
+    public function google()
+    {
         return Socialite::driver('google')->redirect();
     }
 
 
-    public function googleRedirect(){
+    public function googleRedirect()
+    {
         try {
 
          $user = Socialite::driver('google')->user();
@@ -154,13 +154,10 @@ class LoginController extends Controller
     }
 
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return redirect()->route('index');
     }
-
-
-
-
 
 }
