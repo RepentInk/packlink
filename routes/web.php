@@ -26,10 +26,11 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/logout','LoginController@logout')->name('logout');
     Route::get('/search/package','PageController@searchPackagePage')->name('search.package');
     Route::get('/search/video', 'PageController@searchVideoPage')->name('search.video');
+    Route::get('/search/read', 'PageController@searchReadPage')->name('search.read');
 
     // Get Data
-    Route::get('/category','AdminController@getCategory');
-    Route::get('/language', 'AdminController@getLanguage');
+    Route::get('/category', 'PageController@getCategory');
+    Route::get('/language', 'PageController@getLanguage');
     Route::get('/package/{number}','PageController@getPackage');
     Route::get('/tutorial/{number}/{type}', 'PageController@getTutorial');
     Route::get('/tito/{id}/{number}/{type}', 'PageController@getSearchTutorial');
@@ -67,12 +68,11 @@ Route::group(['middleware' => ['auth', 'user']], function () {
 
 
     // Get Data Routes
-    Route::get('/get/category','AdminController@getCategory');
+    Route::get('/get/category', 'PageController@getCategory');
     Route::get('/get/package/{number}','PageController@getPackage');
     Route::get('/get/user/package/{number}','PageController@getPackageUser');
-    Route::get('/get/category','AdminController@getCategory');
-    Route::get('/get/language','AdminController@getLanguage');
-    Route::get('/get/installation','AdminController@getInstallation');
+    Route::get('/get/language', 'PageController@getLanguage');
+    Route::get('/get/installation', 'PageController@getInstallation');
     Route::get('/get/users','PageController@getUsers');
 
     // Route with numbers
@@ -130,15 +130,18 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
         Route::get('/language','AdminController@languagePage')->name('admin.language');
         Route::get('/installation','AdminController@installationPage')->name('admin.installation');
         Route::get('/package','AdminController@packagePage')->name('admin.package');
+        Route::get('/tutorial', 'AdminController@tutorialPage')->name('admin.tutorial');
+        Route::get('/sponser', 'AdminController@sponserPage')->name('admin.sponser');
         Route::get('/logout','LoginController@logout')->name('admin.logout');
 
 
         //get data
-        Route::get('/get/users','AdminController@getUsers');
-        Route::get('/get/category','AdminController@getCategory');
-        Route::get('/get/language','AdminController@getLanguage');
-        Route::get('/get/installation','AdminController@getInstallation');
-        Route::get('/get/package','AdminController@getPackage');
+        Route::get('/get/users/{number}','AdminController@getUsers');
+        Route::get('/get/category/{number}','AdminController@getCategory');
+        Route::get('/get/language/{number}','AdminController@getLanguage');
+        Route::get('/get/installation/{number}','AdminController@getInstallation');
+        Route::get('/get/package/{number}','AdminController@getPackage');
+        Route::get('/get/tutorial/{number}', 'AdminController@getTutorial');
 
 
         //get data with an id

@@ -22,7 +22,6 @@ class Comment extends Model
        'user_id', 'pack_id', 'comment',
     ];
 
-
     public static function saveComment($request){
         $validator = Validator::make($request->all(), [
             'pack_id' => 'required|numeric',
