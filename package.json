@@ -20,7 +20,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "elliptic": ">=6.5.3",
+        "elliptic": ">=6.5.4",
         "moment": "^2.27.0",
         "sweetalert2": "^9.17.1",
         "vue": "^2.6.11",
